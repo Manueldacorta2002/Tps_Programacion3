@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Generic food plate -->
+  <!-- Plate shadow -->
+  <ellipse cx="50" cy="80" rx="38" ry="8" fill="rgba(0,0,0,0.06)"/>
+  <!-- Plate -->
+  <circle cx="50" cy="54" r="36" fill="#ECEFF1"/>
+  <circle cx="50" cy="54" r="36" fill="none" stroke="#CFD8DC" stroke-width="4"/>
+  <!-- Inner ring -->
+  <circle cx="50" cy="54" r="27" fill="none" stroke="#CFD8DC" stroke-width="1.5"/>
+  <!-- Food blob (abstract warm shape) -->
+  <circle cx="50" cy="54" r="18" fill="#FFC72C" opacity="0.75"/>
+  <circle cx="42" cy="48" r="11" fill="#F5A623" opacity="0.75"/>
+  <circle cx="58" cy="50" r="10" fill="#E8943A" opacity="0.75"/>
+  <!-- Fork left -->
+  <rect x="16" y="16" width="4" height="42" rx="2" fill="#90A4AE"/>
+  <rect x="12" y="16" width="3" height="15" rx="1.5" fill="#90A4AE"/>
+  <rect x="21" y="16" width="3" height="15" rx="1.5" fill="#90A4AE"/>
+  <!-- Fork tine join curve (simple) -->
+  <path d="M 16 31 Q 12 37 14 40 Q 16 42 18 40 Q 20 37 16 31Z" fill="#90A4AE"/>
+  <!-- Knife right -->
+  <rect x="80" y="16" width="4" height="46" rx="2" fill="#90A4AE"/>
+  <path d="M 80 16 Q 86 22 86 32 Q 86 38 80 40 Z" fill="#B0BEC5"/>
+</svg>

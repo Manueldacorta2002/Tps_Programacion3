@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Individual fries sticks (behind container) -->
+  <rect x="20" y="12" width="8" height="34" rx="4" fill="#FFC72C"/>
+  <rect x="30" y="6"  width="8" height="40" rx="4" fill="#FFD700"/>
+  <rect x="40" y="9"  width="8" height="37" rx="4" fill="#FFC72C"/>
+  <rect x="50" y="7"  width="8" height="39" rx="4" fill="#FFD700"/>
+  <rect x="60" y="11" width="8" height="35" rx="4" fill="#FFC72C"/>
+  <rect x="70" y="14" width="8" height="32" rx="4" fill="#FFD700"/>
+  <!-- Container body -->
+  <path d="M 16 44 L 24 88 h52 L 84 44 Z" fill="#E53935"/>
+  <!-- Container top fold -->
+  <rect x="14" y="40" width="72" height="9" rx="3" fill="#C62828"/>
+  <!-- Label area on container -->
+  <rect x="26" y="60" width="48" height="18" rx="5" fill="rgba(255,255,255,0.14)"/>
+  <!-- Shine on container -->
+  <path d="M 20 50 Q 25 44 31 47 Q 28 56 20 50Z" fill="white" opacity="0.22"/>
+</svg>

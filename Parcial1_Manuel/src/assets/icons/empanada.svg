@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Empanada body (half-moon dome) -->
+  <path d="M 10 56 C 10 20 90 20 90 56 Z" fill="#F5A623"/>
+  <!-- Shading/depth on top surface -->
+  <path d="M 18 42 Q 28 26 50 22 Q 72 26 82 42 Q 66 35 50 33 Q 34 35 18 42Z" fill="#E8943A" opacity="0.45"/>
+  <!-- Shine -->
+  <path d="M 26 30 Q 33 22 44 26 Q 39 38 26 30Z" fill="white" opacity="0.28"/>
+  <!-- Crimped edge line -->
+  <path d="M 10 56 Q 30 66 50 67 Q 70 66 90 56" stroke="#CF7F00" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Crimp dots -->
+  <circle cx="15"  cy="55" r="3.5" fill="#CF7F00"/>
+  <circle cx="24"  cy="61" r="3.5" fill="#CF7F00"/>
+  <circle cx="34"  cy="65" r="3.5" fill="#CF7F00"/>
+  <circle cx="44"  cy="67" r="3.5" fill="#CF7F00"/>
+  <circle cx="54"  cy="67" r="3.5" fill="#CF7F00"/>
+  <circle cx="64"  cy="65" r="3.5" fill="#CF7F00"/>
+  <circle cx="74"  cy="61" r="3.5" fill="#CF7F00"/>
+  <circle cx="83"  cy="55" r="3.5" fill="#CF7F00"/>
+  <!-- Steam lines -->
+  <path d="M 40 16 Q 42 8 44 16" stroke="#CF7F00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M 52 12 Q 54 4 56 12" stroke="#CF7F00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍔</text></svg>">
+    <title>Food Store - Admin</title>
+</head>
+
+<body>
+    <header>
+        <div class="brand">
+            <h1>⚙️ Panel de administración</h1>
+            <span class="subtitle">Food Store</span>
+        </div>
+        <nav>
+            <button id="logoutButton">Salir</button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="admin-intro">
+            <h2>Bienvenido, admin</h2>
+        </div>
+
+        <div class="admin-stats">
+            <div class="stat-item">
+                <span class="stat-value" id="statProductos">5</span>
+                <span class="stat-label">Productos</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">5</span>
+                <span class="stat-label">Categorías</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">Activo</span>
+                <span class="stat-label">Estado</span>
+            </div>
+        </div>
+
+        <div class="admin-sections">
+            <div class="admin-card">
+                <div class="card-icon">🍔</div>
+                <h3>Productos</h3>
+                <p>Listado de productos disponibles en el catálogo</p>
+                <span class="card-badge" id="badgeProductos">5 cargados</span>
+                <div class="admin-card-actions">
+                    <button class="admin-btn-primary" id="btnAgregarProducto">+ Agregar producto</button>
+                    <button class="admin-btn-ghost" id="btnVerProductos">Ver productos</button>
+                </div>
+            </div>
+            <div class="admin-card">
+                <div class="card-icon">📌</div>
+                <h3>Categorías</h3>
+                <p>Organización por tipo de comida</p>
+                <span class="card-badge">5 activas</span>
+                <div class="category-chips" id="categoryChips"></div>
+            </div>
+        </div>
+
+        <div id="formAgregarProducto" class="add-product-form" style="display: none;">
+            <h4 class="form-title">Nuevo producto</h4>
+            <form id="nuevoProductoForm" novalidate>
+                <div class="form-field">
+                    <label for="inputNombre">Nombre</label>
+                    <input type="text" id="inputNombre" placeholder="Ej: Milanesa" required>
+                </div>
+                <div class="form-field">
+                    <label for="inputCategoria">Categoría</label>
+                    <select id="inputCategoria" required></select>
+                </div>
+                <div class="form-field">
+                    <label for="inputPrecio">Precio ($)</label>
+                    <input type="number" id="inputPrecio" placeholder="Ej: 1500" min="1" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="admin-btn-primary">Agregar</button>
+                    <button type="button" id="btnCancelarAgregar" class="admin-btn-ghost">Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="productList" class="product-list" style="display: none;"></div>
+    </main>
+
+    <footer>
+        <p>Proyecto Programación 3 — Manuel Da Cortá — 2026</p>
+    </footer>
+
+    <script type="module" src="./home.ts"></script>
+</body>
+
+</html>

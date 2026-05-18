@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍔</text></svg>">
+    <title>Food Store - Login</title>
+</head>
+
+<body>
+    <div class="login-wrapper">
+        <div class="brand-banner" aria-hidden="true">
+            <span class="brand-banner-logo">🍔</span>
+            <span class="brand-banner-text">Food Store</span>
+        </div>
+
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">🍔</div>
+                <h1>Food Store</h1>
+                <p>Ingresá para continuar</p>
+            </div>
+
+            <form id="form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" autocomplete="off"
+                        placeholder="ejemplo@correo.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" autocomplete="off"
+                        placeholder="••••••••">
+                </div>
+
+                <div class="role-selector-label">INGRESAR COMO</div>
+
+                <div class="role-row">
+                    <button type="button" class="role-btn active" data-role="client">
+                        <span class="role-icon">👤</span>
+                        <span class="role-name">Cliente</span>
+                        <span class="role-desc">Ver menú y pedir</span>
+                    </button>
+                    <button type="button" class="role-btn" data-role="admin">
+                        <span class="role-icon">⚙️</span>
+                        <span class="role-name">Admin</span>
+                        <span class="role-desc">Gestionar productos</span>
+                    </button>
+                </div>
+
+                <input type="hidden" id="rol" name="rol" value="client">
+
+                <button type="submit" class="btn-login">Ingresar</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>Proyecto Programación 3 — Manuel Da Cortá — 2026</p>
+    </footer>
+
+    <script type="module" src="./login.ts"></script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Top bun dome -->
+  <path d="M 14 44 C 14 8 86 8 86 44 Z" fill="#F5A623"/>
+  <!-- Sesame seeds -->
+  <ellipse cx="36" cy="22" rx="5" ry="2.5" fill="#CF7F00" transform="rotate(-20,36,22)"/>
+  <ellipse cx="51" cy="17" rx="5" ry="2.5" fill="#CF7F00"/>
+  <ellipse cx="66" cy="22" rx="5" ry="2.5" fill="#CF7F00" transform="rotate(20,66,22)"/>
+  <!-- Shine on bun -->
+  <path d="M 26 20 Q 33 13 42 17 Q 38 27 26 20Z" fill="white" opacity="0.22"/>
+  <!-- Bun base strip -->
+  <rect x="14" y="42" width="72" height="8" rx="4" fill="#F5A623"/>
+  <!-- Lettuce wave -->
+  <path d="M 10 52 Q 18 45 26 52 Q 34 45 42 52 Q 50 45 58 52 Q 66 45 74 52 Q 82 45 90 52 L 90 58 L 10 58 Z" fill="#56A850"/>
+  <!-- Tomato -->
+  <rect x="12" y="58" width="76" height="7" rx="3" fill="#E53935"/>
+  <!-- Cheese (slightly wider) -->
+  <polygon points="10,65 90,65 94,72 6,72" fill="#FFC107"/>
+  <!-- Patty -->
+  <rect x="12" y="72" width="76" height="12" rx="6" fill="#6D4C41"/>
+  <!-- Bottom bun -->
+  <rect x="14" y="84" width="72" height="12" rx="7" fill="#E8943A"/>
+</svg>

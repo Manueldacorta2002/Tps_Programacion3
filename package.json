@@ -1,0 +1,10 @@
+{
+  "name": "tp1-html",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "npm run dev --prefix Parcial1_Manuel",
+    "build": "npm run build --prefix Parcial1_Manuel",
+    "preview": "npm run preview --prefix Parcial1_Manuel"
+  }
+}

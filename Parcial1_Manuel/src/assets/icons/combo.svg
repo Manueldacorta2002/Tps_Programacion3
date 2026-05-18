@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Tray base -->
+  <ellipse cx="50" cy="84" rx="44" ry="10" fill="#D7CCC8"/>
+  <rect x="8" y="76" width="84" height="11" rx="6" fill="#BCAAA4"/>
+  <!-- Mini burger left -->
+  <!-- Bun top -->
+  <path d="M 10 52 C 10 34 42 34 42 52 Z" fill="#F5A623"/>
+  <rect x="10" y="50" width="32" height="5" rx="2" fill="#F5A623"/>
+  <!-- Lettuce -->
+  <rect x="10" y="55" width="32" height="4" rx="2" fill="#56A850"/>
+  <!-- Patty -->
+  <rect x="10" y="59" width="32" height="8" rx="3" fill="#6D4C41"/>
+  <!-- Bun bottom -->
+  <rect x="10" y="67" width="32" height="8" rx="4" fill="#E8943A"/>
+  <!-- Fries middle -->
+  <rect x="44" y="36" width="5"  height="26" rx="2.5" fill="#FFC72C"/>
+  <rect x="51" y="30" width="5"  height="32" rx="2.5" fill="#FFD700"/>
+  <rect x="58" y="33" width="5"  height="29" rx="2.5" fill="#FFC72C"/>
+  <rect x="44" y="62" width="22" height="10" rx="3" fill="#E53935"/>
+  <!-- Drink right -->
+  <path d="M 68 42 L 72 76 h16 L 92 42 Z" fill="#FF5722"/>
+  <ellipse cx="80" cy="42" rx="12" ry="4" fill="#BF360C"/>
+  <rect x="84" y="24" width="4" height="24" rx="2" fill="#FF1744"/>
+  <!-- Tray shine -->
+  <path d="M 12 80 Q 50 76 88 80" stroke="white" stroke-width="2" fill="none" opacity="0.28" stroke-linecap="round"/>
+</svg>

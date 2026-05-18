@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍔</text></svg>">
+    <title>Food Store - Carrito</title>
+</head>
+
+<body>
+    <header>
+        <div class="brand">
+            <h1>🛒 Mi Carrito</h1>
+            <span class="subtitle">Revisá lo que elegiste</span>
+        </div>
+        <nav>
+            <a href="../home/home.html" class="btn-back">← Volver al menú</a>
+            <button id="logoutButton">Salir</button>
+        </nav>
+    </header>
+
+    <main class="cart-page-wrapper">
+        <div id="cartContent" class="cart-container"></div>
+    </main>
+
+    <footer>
+        <p>Proyecto Programación 3 — Manuel Da Cortá — 2026</p>
+    </footer>
+
+    <!-- Modal confirmación de pedido -->
+    <div id="confirmModal" class="modal-overlay" aria-hidden="true">
+      <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-icon">🎉</div>
+        <h2 id="modalTitle" class="modal-title">¡Tu pedido fue confirmado!</h2>
+        <p class="modal-subtitle">Gracias por tu compra. Estamos preparando todo para vos.</p>
+
+        <div class="modal-summary">
+          <h3 class="modal-summary-title">Resumen del pedido</h3>
+          <div class="modal-summary-row">
+            <span>Productos</span>
+            <span id="modalItemCount">—</span>
+          </div>
+          <div class="modal-summary-row">
+            <span>Total</span>
+            <span id="modalTotal">—</span>
+          </div>
+          <div class="modal-summary-row">
+            <span>Estado</span>
+            <span class="modal-status">✓ Confirmado</span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <a href="../home/home.html" class="btn-back modal-btn-menu">Volver al menú</a>
+          <button id="modalClose" class="btn-secondary modal-btn-close">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./cart.ts"></script>
+</body>
+
+</html>

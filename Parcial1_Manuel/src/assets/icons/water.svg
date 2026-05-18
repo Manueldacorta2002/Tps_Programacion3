@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Bottle neck -->
+  <rect x="38" y="22" width="24" height="16" rx="4" fill="#81D4FA"/>
+  <!-- Bottle cap -->
+  <rect x="35" y="12" width="30" height="13" rx="5" fill="#0288D1"/>
+  <!-- Bottle body -->
+  <rect x="28" y="36" width="44" height="54" rx="12" fill="#81D4FA"/>
+  <!-- Water level (fill effect) -->
+  <path d="M 28 62 Q 50 56 72 62 L 72 80 Q 62 92 38 80 Z" fill="#29B6F6" opacity="0.5"/>
+  <!-- Bubbles -->
+  <circle cx="40" cy="70" r="3.5" fill="white" opacity="0.42"/>
+  <circle cx="54" cy="78" r="3"   fill="white" opacity="0.38"/>
+  <circle cx="44" cy="82" r="2.5" fill="white" opacity="0.35"/>
+  <!-- Label -->
+  <rect x="30" y="48" width="40" height="22" rx="6" fill="white" opacity="0.38"/>
+  <!-- Shine on body (left) -->
+  <path d="M 32 42 Q 35 34 40 37 Q 37 48 32 42Z" fill="white" opacity="0.5"/>
+  <!-- Shine on neck -->
+  <path d="M 40 24 Q 42 20 46 22 Q 44 28 40 24Z" fill="white" opacity="0.45"/>
+</svg>

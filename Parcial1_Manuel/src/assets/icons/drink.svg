@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Cup body -->
+  <path d="M 28 30 L 36 84 h28 L 72 30 Z" fill="#FF5722"/>
+  <!-- Cola liquid inside -->
+  <path d="M 30 44 L 37 84 h26 L 70 44 Z" fill="#3E2723"/>
+  <!-- Ice cubes -->
+  <rect x="34" y="52" width="12" height="11" rx="2" fill="#80DEEA" opacity="0.55"/>
+  <rect x="48" y="58" width="10" height="10" rx="2" fill="#80DEEA" opacity="0.45"/>
+  <rect x="38" y="66" width="11" height="10" rx="2" fill="#80DEEA" opacity="0.45"/>
+  <!-- Lid dome -->
+  <path d="M 26 30 Q 26 20 50 20 Q 74 20 74 30 Z" fill="#BF360C"/>
+  <!-- Lid rim -->
+  <ellipse cx="50" cy="30" rx="24" ry="6" fill="#E64A19"/>
+  <!-- Straw -->
+  <rect x="58" y="2" width="6" height="50" rx="3" fill="#FF1744"/>
+  <!-- Straw shine -->
+  <rect x="59" y="2" width="2" height="50" rx="1" fill="rgba(255,255,255,0.3)"/>
+  <!-- Shine on cup -->
+  <path d="M 33 38 Q 37 31 44 34 Q 41 44 33 38Z" fill="white" opacity="0.24"/>
+</svg>

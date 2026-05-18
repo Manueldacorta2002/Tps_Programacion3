@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍔</text></svg>">
+    <title>Food Store - Catálogo</title>
+</head>
+
+<body>
+    <header>
+        <div class="brand">
+            <h1>🍔 Food Store</h1>
+            <span class="subtitle">Comida rápida simple</span>
+        </div>
+        <nav>
+            <a href="../cart/cart.html" id="cartLink" class="cart-link">🛒 Mi carrito <span id="cartCount" class="cart-badge">0</span></a>
+            <button id="logoutButton">Salir</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- MEJORA: hero principal con composición en dos columnas -->
+        <section class="hero-section">
+            <div class="hero-copy">
+                <span class="hero-kicker">Sabor casero, ritmo urbano</span>
+                <h2 class="hero-title">Tu antojo ideal</h2>
+                <p class="hero-description">Burgers, pizzas, combos y extras en una experiencia más clara, cálida y rápida de recorrer.</p>
+                <div class="hero-actions">
+                    <a href="#productsSection" class="hero-cta">Ver menú</a>
+                    <p class="hero-note">Pedidos ágiles, promos del día y todo listo para sumar al carrito.</p>
+                </div>
+            </div>
+
+            <div class="hero-visual" aria-live="polite">
+                <div class="hero-glow hero-glow-back"></div>
+                <div class="hero-glow hero-glow-front"></div>
+                <article class="hero-product-card">
+                    <span id="heroBadge" class="hero-badge">Best seller</span>
+                    <div id="heroProductVisual" class="hero-product-visual">🍔</div>
+                    <div class="hero-product-info">
+                        <p id="heroProductCategory" class="hero-product-category">Hamburguesas</p>
+                        <h3 id="heroProductName">Food Store Especial</h3>
+                        <p id="heroProductDescription" class="hero-product-description">Un combo elegido para abrir el apetito apenas entrás.</p>
+                        <p id="heroProductPrice" class="hero-product-price">$0</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- MEJORA: banners promocionales en grilla de dos columnas -->
+        <section class="promo-banners" aria-label="Promociones destacadas">
+            <article class="promo-banner promo-banner-main">
+                <span class="promo-tag">Promo del día</span>
+                <h3>2x1 en acompañamientos desde las 20 hs</h3>
+                <p>Perfecto para sumar papas o empanadas y completar cualquier combo.</p>
+            </article>
+            <article class="promo-banner promo-banner-accent">
+                <span class="promo-tag">Recomendado</span>
+                <h3>Combos listos para compartir</h3>
+                <p>Elegí una opción rápida y cerrá el pedido en pocos clics.</p>
+            </article>
+        </section>
+
+        <div class="filters">
+            <input type="text" id="searchInput" placeholder="🔍 ¿Qué tenés ganas de comer?">
+            <div id="categoryFilters" class="category-buttons"></div>
+        </div>
+
+        <!-- MEJORA: sección de productos con jerarquía visual más marcada -->
+        <section id="productsSection" class="products-section">
+            <div class="section-heading">
+                <div>
+                    <span class="section-kicker">Best Products</span>
+                    <h2 class="section-title">Nuestro menú</h2>
+                </div>
+                <p class="section-hint">Elegí lo que más te guste y sumalo al carrito</p>
+            </div>
+
+            <div id="productsGrid" class="products-grid"></div>
+            <div id="noResults" class="no-results" style="display: none;">
+                <div class="no-results-icon">🔍</div>
+                <p class="no-results-text">No encontramos nada con ese filtro</p>
+                <p class="no-results-hint">Probá con otra búsqueda o cambiá la categoría</p>
+            </div>
+        </section>
+
+        <!-- MEJORA: bloque inferior con historia visual y métricas -->
+        <section class="community-section" aria-label="Impacto de Food Store">
+            <div class="community-visual">
+                <div class="community-portrait">🧑‍🍳</div>
+                <div class="community-copy">
+                    <span class="community-kicker">Food Store Experience</span>
+                    <h3>La misma cocina rápida de siempre, con una experiencia más clara para elegir mejor.</h3>
+                </div>
+            </div>
+            <div class="community-stats">
+                <article class="stat-card">
+                    <strong>126k+</strong>
+                    <span>clientes con antojo resuelto</span>
+                </article>
+                <article class="stat-card">
+                    <strong>15 min</strong>
+                    <span>promedio para tener el pedido listo</span>
+                </article>
+                <article class="stat-card">
+                    <strong>98%</strong>
+                    <span>de favoritos vuelven por su combo</span>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <div id="toast" class="toast">¡Listo! Se agregó al carrito 🛒</div>
+
+    <footer>
+        <p>Food Store mantiene su identidad, pero con una navegación más limpia y un menú más tentador.</p>
+        <p>Proyecto Programación 3 — Manuel Da Cortá — 2026</p>
+    </footer>
+
+    <script type="module" src="./home.ts"></script>
+</body>
+
+</html>

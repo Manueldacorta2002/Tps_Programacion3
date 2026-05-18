@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Outer crust -->
+  <circle cx="50" cy="50" r="44" fill="#E8943A"/>
+  <!-- Crust ring texture -->
+  <circle cx="50" cy="50" r="38" fill="#FFC72C"/>
+  <!-- Sauce -->
+  <circle cx="50" cy="50" r="34" fill="#E53935"/>
+  <!-- Cheese base -->
+  <circle cx="50" cy="50" r="31" fill="#FFF176"/>
+  <!-- Pepperoni toppings x6 -->
+  <circle cx="50" cy="33" r="7" fill="#C62828"/>
+  <circle cx="35" cy="42" r="7" fill="#C62828"/>
+  <circle cx="35" cy="58" r="7" fill="#C62828"/>
+  <circle cx="50" cy="67" r="7" fill="#C62828"/>
+  <circle cx="65" cy="58" r="7" fill="#C62828"/>
+  <circle cx="65" cy="42" r="7" fill="#C62828"/>
+  <!-- Pepperoni center detail -->
+  <circle cx="50" cy="33" r="3" fill="#B71C1C"/>
+  <circle cx="35" cy="42" r="3" fill="#B71C1C"/>
+  <circle cx="35" cy="58" r="3" fill="#B71C1C"/>
+  <circle cx="50" cy="67" r="3" fill="#B71C1C"/>
+  <circle cx="65" cy="58" r="3" fill="#B71C1C"/>
+  <circle cx="65" cy="42" r="3" fill="#B71C1C"/>
+  <!-- Cheese melt lines -->
+  <path d="M 33 38 Q 50 34 67 38" stroke="#FFF9C4" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.8"/>
+  <path d="M 31 54 Q 50 50 69 54" stroke="#FFF9C4" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.8"/>
+  <!-- Shine -->
+  <path d="M 35 33 Q 42 24 52 29 Q 47 41 35 33Z" fill="white" opacity="0.22"/>
+</svg>
