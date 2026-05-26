@@ -1,23 +1,35 @@
 package com.utn.entities;
 
+import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+@Entity
+@Table(name = "detalle_pedidos")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ToString
-@EqualsAndHashCode
-public class DetallePedido {
+@SuperBuilder
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class DetallePedido extends Base {
 
     private Integer cantidad;
     private Double subtotal;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pedido_id", nullable = false)
+    @ToString.Exclude
+    private Pedido pedido;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "producto_id", nullable = false)
+    @ToString.Exclude
     private Producto producto;
 
-    // Calcula el subtotal en base a la cantidad y el precio del producto
     public void calcularSubtotal() {
-        if (producto != null) {
+        if (producto != null && cantidad != null) {
             this.subtotal = cantidad * producto.getPrecio();
         }
     }

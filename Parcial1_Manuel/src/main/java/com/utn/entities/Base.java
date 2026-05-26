@@ -1,10 +1,12 @@
 package com.utn.entities;
 
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
+@MappedSuperclass
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,8 +16,22 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = {"id"})
 public abstract class Base {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private boolean eliminado;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean eliminado = false;
+
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+    }
 
 }
