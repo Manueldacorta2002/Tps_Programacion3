@@ -25,3 +25,11 @@ dist-ssr
 
 # Base de datos H2 local (TP JPA)
 data/
+
+# Carpetas generadas
+build/
+bin/
+data/
+.gradle/
+out/
+node_modules/

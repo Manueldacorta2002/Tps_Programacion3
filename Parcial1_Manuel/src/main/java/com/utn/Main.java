@@ -1,295 +1,494 @@
 package com.utn;
 
-import com.utn.dtos.UsuarioDTO;
-import com.utn.entities.*;
-import com.utn.enums.Estado;
-import com.utn.enums.FormaPago;
-import com.utn.enums.Rol;
+import com.utn.entities.Categoria;
+import com.utn.entities.Producto;
+import com.utn.repository.CategoriaRepository;
+import com.utn.repository.ProductoRepository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.Scanner;
 
 public class Main {
 
+    private static final Scanner SCANNER = new Scanner(System.in);
+    private static final CategoriaRepository categoriaRepository = new CategoriaRepository();
+    private static final ProductoRepository productoRepository = new ProductoRepository();
+
     public static void main(String[] args) {
+        boolean salir = false;
 
-        // ==================== CATEGORÍAS ====================
-        Categoria hamburguesas = Categoria.builder()
-                .id(1L)
-                .eliminado(false)
-                .createdAt(LocalDateTime.now())
-                .nombre("Hamburguesas")
-                .descripcion("Hamburguesas artesanales a la parrilla")
-                .build();
+        while (!salir) {
+            System.out.println("\n===== MENU PRINCIPAL =====");
+            System.out.println("1. Gestion de Categorias");
+            System.out.println("2. Gestion de Productos");
+            System.out.println("3. Reportes");
+            System.out.println("0. Salir");
+            System.out.print("Seleccione una opcion: ");
 
-        Categoria pizzas = Categoria.builder()
-                .id(2L)
-                .eliminado(false)
-                .createdAt(LocalDateTime.now())
-                .nombre("Pizzas")
-                .descripcion("Pizzas a la piedra con ingredientes frescos")
-                .build();
-
-        Categoria bebidas = Categoria.builder()
-                .id(3L)
-                .eliminado(false)
-                .createdAt(LocalDateTime.now())
-                .nombre("Bebidas")
-                .descripcion("Gaseosas, aguas y jugos")
-                .build();
-
-        // ==================== PRODUCTOS ====================
-        Producto p1 = Producto.builder()
-                .id(1L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Hamburguesa Clásica")
-                .precio(1500.0)
-                .descripcion("Medallón de carne con lechuga, tomate y mayonesa")
-                .stock(20)
-                .imagen("burger-classic.png")
-                .disponible(true)
-                .categoria(hamburguesas)
-                .build();
-
-        Producto p2 = Producto.builder()
-                .id(2L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Hamburguesa Doble")
-                .precio(2200.0)
-                .descripcion("Dos medallones, doble queso y bacon")
-                .stock(15)
-                .imagen("burger-doble.png")
-                .disponible(true)
-                .categoria(hamburguesas)
-                .build();
-
-        Producto p3 = Producto.builder()
-                .id(3L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Hamburguesa Veggie")
-                .precio(1800.0)
-                .descripcion("Medallón de garbanzo con verduras y pesto")
-                .stock(10)
-                .imagen("burger-veggie.png")
-                .disponible(true)
-                .categoria(hamburguesas)
-                .build();
-
-        Producto p4 = Producto.builder()
-                .id(4L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Pizza Muzzarella")
-                .precio(2500.0)
-                .descripcion("Tomate, mozzarella y albahaca")
-                .stock(12)
-                .imagen("pizza-muzza.png")
-                .disponible(true)
-                .categoria(pizzas)
-                .build();
-
-        Producto p5 = Producto.builder()
-                .id(5L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Pizza Pepperoni")
-                .precio(3000.0)
-                .descripcion("Salsa, queso y pepperoni importado")
-                .stock(8)
-                .imagen("pizza-pepperoni.png")
-                .disponible(true)
-                .categoria(pizzas)
-                .build();
-
-        Producto p6 = Producto.builder()
-                .id(6L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Pizza Napolitana")
-                .precio(2800.0)
-                .descripcion("Tomate, mozzarella, ajo y aceite de oliva")
-                .stock(10)
-                .imagen("pizza-napo.png")
-                .disponible(true)
-                .categoria(pizzas)
-                .build();
-
-        Producto p7 = Producto.builder()
-                .id(7L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Papas Fritas")
-                .precio(900.0)
-                .descripcion("Papas crujientes con sal y salsa a elección")
-                .stock(30)
-                .imagen("fries.png")
-                .disponible(true)
-                .categoria(hamburguesas)
-                .build();
-
-        Producto p8 = Producto.builder()
-                .id(8L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Gaseosa")
-                .precio(700.0)
-                .descripcion("Gaseosa 500ml a elección")
-                .stock(50)
-                .imagen("soda.png")
-                .disponible(true)
-                .categoria(bebidas)
-                .build();
-
-        Producto p9 = Producto.builder()
-                .id(9L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Agua Mineral")
-                .precio(400.0)
-                .descripcion("Agua mineral sin gas 500ml")
-                .stock(60)
-                .imagen("water.png")
-                .disponible(true)
-                .categoria(bebidas)
-                .build();
-
-        Producto p10 = Producto.builder()
-                .id(10L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Combo Familiar")
-                .precio(6500.0)
-                .descripcion("2 hamburguesas + 1 pizza + 4 bebidas")
-                .stock(5)
-                .imagen("combo-familiar.png")
-                .disponible(true)
-                .categoria(hamburguesas)
-                .build();
-
-        // Lista de todos los productos
-        List<Producto> productos = new ArrayList<>(
-                List.of(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10)
-        );
-
-        // ==================== USUARIOS ====================
-        Usuario usuario1 = Usuario.builder()
-                .id(1L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Manuel")
-                .apellido("García")
-                .mail("manuel@foodstore.com")
-                .celular("2615001001")
-                .contrasenia("admin123")   // no se imprime gracias a @ToString.Exclude
-                .rol(Rol.ADMIN)
-                .build();
-
-        Usuario usuario2 = Usuario.builder()
-                .id(2L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Laura")
-                .apellido("Martínez")
-                .mail("laura@foodstore.com")
-                .celular("2615002002")
-                .contrasenia("cliente456") // no se imprime gracias a @ToString.Exclude
-                .rol(Rol.USUARIO)
-                .build();
-
-        // ==================== PEDIDOS ====================
-
-        // Pedido 1 — usuario1
-        Pedido pedido1 = Pedido.builder()
-                .id(1L).eliminado(false).createdAt(LocalDateTime.now())
-                .fecha(LocalDate.of(2025, 5, 1))
-                .estado(Estado.CONFIRMADO)
-                .formaPago(FormaPago.TARJETA)
-                .usuario(usuario1)
-                .build();
-        pedido1.addDetallePedido(2, p1);   // 2x Hamburguesa Clásica
-        pedido1.addDetallePedido(1, p7);   // 1x Papas Fritas
-        pedido1.addDetallePedido(2, p8);   // 2x Gaseosa
-        pedido1.calcularTotal();
-
-        // Pedido 2 — usuario1 (mismo usuario para que tenga más pedidos)
-        Pedido pedido2 = Pedido.builder()
-                .id(2L).eliminado(false).createdAt(LocalDateTime.now())
-                .fecha(LocalDate.of(2025, 5, 3))
-                .estado(Estado.TERMINADO)
-                .formaPago(FormaPago.EFECTIVO)
-                .usuario(usuario1)
-                .build();
-        pedido2.addDetallePedido(1, p4);   // 1x Pizza Muzzarella
-        pedido2.addDetallePedido(1, p5);   // 1x Pizza Pepperoni
-        pedido2.addDetallePedido(3, p9);   // 3x Agua Mineral
-        pedido2.calcularTotal();
-
-        // Pedido 3 — usuario2
-        Pedido pedido3 = Pedido.builder()
-                .id(3L).eliminado(false).createdAt(LocalDateTime.now())
-                .fecha(LocalDate.of(2025, 5, 5))
-                .estado(Estado.PENDIENTE)
-                .formaPago(FormaPago.TRANSFERENCIA)
-                .usuario(usuario2)
-                .build();
-        pedido3.addDetallePedido(1, p10);  // 1x Combo Familiar
-        pedido3.addDetallePedido(2, p8);   // 2x Gaseosa
-        pedido3.calcularTotal();
-
-        List<Pedido> pedidos = List.of(pedido1, pedido2, pedido3);
-
-        // ============================================================
-        // A. UN PRODUCTO CON TOSTRING
-        // ============================================================
-        System.out.println("--- PRODUCTO CON TOSTRING ---");
-        System.out.println(p1);
-
-        // ============================================================
-        // B. LISTADO COMPLETO DE PRODUCTOS
-        // ============================================================
-        System.out.println("\n--- LISTADO DE PRODUCTOS ---");
-        for (Producto p : productos) {
-            System.out.println(p);
+            if (!SCANNER.hasNextLine()) {
+                System.out.println("Entrada finalizada. Cerrando aplicacion.");
+                break;
+            }
+            String opcion = SCANNER.nextLine().trim();
+            switch (opcion) {
+                case "1" -> menuCategorias();
+                case "2" -> menuProductos();
+                case "3" -> menuReportes();
+                case "0" -> {
+                    salir = true;
+                    System.out.println("Saliendo...");
+                }
+                default -> System.out.println("Opcion invalida.");
+            }
         }
 
-        // ============================================================
-        // C. PEDIDOS DEL USUARIO CON MÁS PEDIDOS
-        // ============================================================
-        System.out.println("\n--- PEDIDOS DEL USUARIO CON MÁS PEDIDOS ---");
-
-        // Contamos cuántos pedidos tiene cada usuario
-        Map<Long, Long> pedidosPorUsuario = pedidos.stream()
-                .collect(Collectors.groupingBy(
-                        ped -> ped.getUsuario().getId(),
-                        Collectors.counting()
-                ));
-
-        // Buscamos el id del usuario con más pedidos
-        Long idConMasPedidos = pedidosPorUsuario.entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
-                .orElse(null);
-
-        // Filtramos y mostramos
-        pedidos.stream()
-                .filter(ped -> ped.getUsuario().getId().equals(idConMasPedidos))
-                .forEach(ped -> {
-                    System.out.println("Usuario: " + ped.getUsuario());
-                    System.out.println("Pedido:  " + ped);
-                    System.out.println();
-                });
-
-        // ============================================================
-        // D. COMPARACIÓN DE PRODUCTO REPETIDO CON EQUALS
-        // ============================================================
-        System.out.println("--- COMPARACIÓN DE PRODUCTO REPETIDO CON EQUALS ---");
-
-        // Producto nuevo con el mismo nombre que p1 (debe dar true al comparar)
-        Producto productoRepetido = Producto.builder()
-                .id(99L).eliminado(false).createdAt(LocalDateTime.now())
-                .nombre("Hamburguesa Clásica")
-                .precio(9999.0)
-                .descripcion("Copia de prueba")
-                .stock(0)
-                .imagen("test.png")
-                .disponible(false)
-                .categoria(hamburguesas)
-                .build();
-
-        for (Producto p : productos) {
-            boolean resultado = productoRepetido.equals(p);
-            System.out.println("Comparando con: " + p.getNombre() + " -> " + resultado);
-        }
-
-        // ============================================================
-        // E. USUARIO DTO SIN DATOS SENSIBLES
-        // ============================================================
-        System.out.println("\n--- USUARIO DTO SIN DATOS SENSIBLES ---");
-        UsuarioDTO usuarioDTO = UsuarioDTO.fromUsuario(usuario1);
-        System.out.println(usuarioDTO);
+        SCANNER.close();
     }
 
+    private static void menuCategorias() {
+        boolean volver = false;
+
+        while (!volver) {
+            System.out.println("\n--- GESTION DE CATEGORIAS ---");
+            System.out.println("1. Alta de categoria");
+            System.out.println("2. Baja logica de categoria");
+            System.out.println("3. Modificacion de categoria");
+            System.out.println("4. Listado de categorias");
+            System.out.println("0. Volver");
+            System.out.print("Seleccione una opcion: ");
+
+            String opcion = SCANNER.nextLine().trim();
+            switch (opcion) {
+                case "1" -> altaCategoria();
+                case "2" -> bajaLogicaCategoria();
+                case "3" -> modificarCategoria();
+                case "4" -> listarCategoriasActivas();
+                case "0" -> volver = true;
+                default -> System.out.println("Opcion invalida.");
+            }
+        }
+    }
+
+    private static void menuProductos() {
+        boolean volver = false;
+
+        while (!volver) {
+            System.out.println("\n--- GESTION DE PRODUCTOS ---");
+            System.out.println("1. Alta de producto");
+            System.out.println("2. Baja logica de producto");
+            System.out.println("3. Modificacion de producto");
+            System.out.println("4. Listado de productos");
+            System.out.println("0. Volver");
+            System.out.print("Seleccione una opcion: ");
+
+            String opcion = SCANNER.nextLine().trim();
+            switch (opcion) {
+                case "1" -> altaProducto();
+                case "2" -> bajaLogicaProducto();
+                case "3" -> modificarProducto();
+                case "4" -> listarProductosActivos();
+                case "0" -> volver = true;
+                default -> System.out.println("Opcion invalida.");
+            }
+        }
+    }
+
+    private static void menuReportes() {
+        boolean volver = false;
+
+        while (!volver) {
+            System.out.println("\n--- REPORTES ---");
+            System.out.println("1. Productos por categoria");
+            System.out.println("0. Volver");
+            System.out.print("Seleccione una opcion: ");
+
+            String opcion = SCANNER.nextLine().trim();
+            switch (opcion) {
+                case "1" -> reporteProductosPorCategoria();
+                case "0" -> volver = true;
+                default -> System.out.println("Opcion invalida.");
+            }
+        }
+    }
+
+    private static void altaCategoria() {
+        System.out.println("\n--- ALTA DE CATEGORIA ---");
+        System.out.print("Nombre: ");
+        String nombre = SCANNER.nextLine().trim();
+
+        if (nombre.isEmpty()) {
+            System.out.println("Error: el nombre no puede estar vacio.");
+            return;
+        }
+
+        System.out.print("Descripcion: ");
+        String descripcion = SCANNER.nextLine().trim();
+
+        Categoria categoria = new Categoria();
+        categoria.setNombre(nombre);
+        categoria.setDescripcion(descripcion);
+        categoria.setEliminado(false);
+
+        Categoria guardada = categoriaRepository.guardar(categoria);
+        System.out.println("Categoria creada con ID: " + guardada.getId());
+    }
+
+    private static void bajaLogicaCategoria() {
+        System.out.println("\n--- BAJA LOGICA DE CATEGORIA ---");
+        List<Categoria> categorias = listarCategoriasActivas();
+        if (categorias.isEmpty()) {
+            return;
+        }
+
+        Long id = leerLongRequerido("ID de categoria a eliminar: ");
+        if (id == null) {
+            return;
+        }
+
+        Optional<Categoria> categoriaOpt = categoriaRepository.buscarPorId(id);
+        if (categoriaOpt.isEmpty() || categoriaOpt.get().isEliminado()) {
+            System.out.println("Error: la categoria no existe o ya fue eliminada.");
+            return;
+        }
+
+        String nombreCategoria = categoriaOpt.get().getNombre();
+        boolean eliminada = categoriaRepository.eliminarLogico(id);
+        if (eliminada) {
+            System.out.println("Categoria eliminada logicamente: " + nombreCategoria);
+        } else {
+            System.out.println("No se pudo eliminar la categoria.");
+        }
+    }
+
+    private static void modificarCategoria() {
+        System.out.println("\n--- MODIFICACION DE CATEGORIA ---");
+        List<Categoria> categorias = listarCategoriasActivas();
+        if (categorias.isEmpty()) {
+            return;
+        }
+
+        Long id = leerLongRequerido("ID de categoria a modificar: ");
+        if (id == null) {
+            return;
+        }
+
+        Optional<Categoria> categoriaOpt = categoriaRepository.buscarPorId(id);
+        if (categoriaOpt.isEmpty() || categoriaOpt.get().isEliminado()) {
+            System.out.println("Error: la categoria no existe o fue eliminada.");
+            return;
+        }
+
+        Categoria categoria = categoriaOpt.get();
+        System.out.println("Nombre actual: " + categoria.getNombre());
+        System.out.println("Descripcion actual: " + valorSeguro(categoria.getDescripcion()));
+
+        System.out.print("Nuevo nombre (vacio para conservar): ");
+        String nuevoNombre = SCANNER.nextLine().trim();
+        System.out.print("Nueva descripcion (vacio para conservar): ");
+        String nuevaDescripcion = SCANNER.nextLine().trim();
+
+        if (!nuevoNombre.isEmpty()) {
+            categoria.setNombre(nuevoNombre);
+        }
+        if (!nuevaDescripcion.isEmpty()) {
+            categoria.setDescripcion(nuevaDescripcion);
+        }
+
+        if (categoria.getNombre() == null || categoria.getNombre().trim().isEmpty()) {
+            System.out.println("Error: el nombre no puede quedar vacio.");
+            return;
+        }
+
+        categoriaRepository.guardar(categoria);
+        System.out.println("Categoria actualizada correctamente.");
+    }
+
+    private static List<Categoria> listarCategoriasActivas() {
+        List<Categoria> categorias = categoriaRepository.listarActivos();
+        System.out.println("\n--- LISTADO DE CATEGORIAS ACTIVAS ---");
+
+        if (categorias.isEmpty()) {
+            System.out.println("No hay categorias activas.");
+            return categorias;
+        }
+
+        for (Categoria categoria : categorias) {
+            System.out.printf("ID: %d | Nombre: %s | Descripcion: %s%n",
+                    categoria.getId(),
+                    valorSeguro(categoria.getNombre()),
+                    valorSeguro(categoria.getDescripcion()));
+        }
+        return categorias;
+    }
+
+    private static void altaProducto() {
+        System.out.println("\n--- ALTA DE PRODUCTO ---");
+
+        List<Categoria> categorias = listarCategoriasActivas();
+        if (categorias.isEmpty()) {
+            System.out.println("No se puede crear un producto sin categorias activas.");
+            return;
+        }
+
+        Long categoriaId = leerLongRequerido("ID de categoria: ");
+        if (categoriaId == null) {
+            return;
+        }
+
+        Optional<Categoria> categoriaOpt = categoriaRepository.buscarPorId(categoriaId);
+        if (categoriaOpt.isEmpty() || categoriaOpt.get().isEliminado()) {
+            System.out.println("Error: categoria invalida.");
+            return;
+        }
+
+        System.out.print("Nombre: ");
+        String nombre = SCANNER.nextLine().trim();
+        if (nombre.isEmpty()) {
+            System.out.println("Error: el nombre no puede estar vacio.");
+            return;
+        }
+
+        System.out.print("Descripcion: ");
+        String descripcion = SCANNER.nextLine().trim();
+
+        Double precio = leerDoubleRequerido("Precio (> 0): ");
+        if (precio == null) {
+            return;
+        }
+        if (precio <= 0) {
+            System.out.println("Error: el precio debe ser mayor a 0.");
+            return;
+        }
+
+        Integer stock = leerIntegerRequerido("Stock (>= 0): ");
+        if (stock == null) {
+            return;
+        }
+        if (stock < 0) {
+            System.out.println("Error: el stock debe ser mayor o igual a 0.");
+            return;
+        }
+
+        Producto producto = new Producto();
+        producto.setNombre(nombre);
+        producto.setDescripcion(descripcion);
+        producto.setPrecio(precio);
+        producto.setStock(stock);
+        producto.setDisponible(true);
+        producto.setEliminado(false);
+        producto.setCategoria(categoriaOpt.get());
+
+        Producto guardado = productoRepository.guardar(producto);
+        System.out.println("Producto creado con ID: " + guardado.getId()
+                + " | Categoria: " + categoriaOpt.get().getNombre());
+    }
+
+    private static void bajaLogicaProducto() {
+        System.out.println("\n--- BAJA LOGICA DE PRODUCTO ---");
+        List<Producto> productos = listarProductosActivos();
+        if (productos.isEmpty()) {
+            return;
+        }
+
+        Long id = leerLongRequerido("ID de producto a eliminar: ");
+        if (id == null) {
+            return;
+        }
+
+        Optional<Producto> productoOpt = productoRepository.buscarPorId(id);
+        if (productoOpt.isEmpty() || productoOpt.get().isEliminado()) {
+            System.out.println("Error: el producto no existe o ya fue eliminado.");
+            return;
+        }
+
+        String nombreProducto = productoOpt.get().getNombre();
+        boolean eliminado = productoRepository.eliminarLogico(id);
+        if (eliminado) {
+            System.out.println("Producto eliminado logicamente: " + nombreProducto);
+        } else {
+            System.out.println("No se pudo eliminar el producto.");
+        }
+    }
+
+    private static void modificarProducto() {
+        System.out.println("\n--- MODIFICACION DE PRODUCTO ---");
+        List<Producto> productos = listarProductosActivos();
+        if (productos.isEmpty()) {
+            return;
+        }
+
+        Long id = leerLongRequerido("ID de producto a modificar: ");
+        if (id == null) {
+            return;
+        }
+
+        Optional<Producto> productoOpt = productoRepository.buscarPorId(id);
+        if (productoOpt.isEmpty() || productoOpt.get().isEliminado()) {
+            System.out.println("Error: el producto no existe o fue eliminado.");
+            return;
+        }
+
+        Producto producto = productoOpt.get();
+        System.out.println("Nombre actual: " + valorSeguro(producto.getNombre()));
+        System.out.println("Precio actual: " + valorSeguro(producto.getPrecio()));
+        System.out.println("Stock actual: " + valorSeguro(producto.getStock()));
+
+        System.out.print("Nuevo nombre (vacio para conservar): ");
+        String nuevoNombre = SCANNER.nextLine().trim();
+
+        System.out.print("Nuevo precio (vacio para conservar): ");
+        String precioTexto = SCANNER.nextLine().trim();
+
+        System.out.print("Nuevo stock (vacio para conservar): ");
+        String stockTexto = SCANNER.nextLine().trim();
+
+        if (!nuevoNombre.isEmpty()) {
+            producto.setNombre(nuevoNombre);
+        }
+
+        if (!precioTexto.isEmpty()) {
+            Double nuevoPrecio = parseDouble(precioTexto);
+            if (nuevoPrecio == null) {
+                System.out.println("Error: precio invalido.");
+                return;
+            }
+            if (nuevoPrecio <= 0) {
+                System.out.println("Error: el precio debe ser mayor a 0.");
+                return;
+            }
+            producto.setPrecio(nuevoPrecio);
+        }
+
+        if (!stockTexto.isEmpty()) {
+            Integer nuevoStock = parseInteger(stockTexto);
+            if (nuevoStock == null) {
+                System.out.println("Error: stock invalido.");
+                return;
+            }
+            if (nuevoStock < 0) {
+                System.out.println("Error: el stock debe ser mayor o igual a 0.");
+                return;
+            }
+            producto.setStock(nuevoStock);
+        }
+
+        if (producto.getNombre() == null || producto.getNombre().trim().isEmpty()) {
+            System.out.println("Error: el nombre no puede quedar vacio.");
+            return;
+        }
+
+        productoRepository.guardar(producto);
+        System.out.println("Producto actualizado correctamente.");
+    }
+
+    private static List<Producto> listarProductosActivos() {
+        List<Producto> productos = productoRepository.listarActivos();
+        System.out.println("\n--- LISTADO DE PRODUCTOS ACTIVOS ---");
+
+        if (productos.isEmpty()) {
+            System.out.println("No hay productos activos.");
+            return productos;
+        }
+
+        for (Producto producto : productos) {
+            String nombreCategoria = producto.getCategoria() != null
+                    ? valorSeguro(producto.getCategoria().getNombre())
+                    : "Sin categoria";
+            System.out.printf("ID: %d | Nombre: %s | Precio: %.2f | Stock: %d | Categoria: %s%n",
+                    producto.getId(),
+                    valorSeguro(producto.getNombre()),
+                    producto.getPrecio(),
+                    producto.getStock(),
+                    nombreCategoria);
+        }
+        return productos;
+    }
+
+    private static void reporteProductosPorCategoria() {
+        System.out.println("\n--- REPORTE: PRODUCTOS POR CATEGORIA ---");
+
+        List<Categoria> categorias = listarCategoriasActivas();
+        if (categorias.isEmpty()) {
+            return;
+        }
+
+        Long categoriaId = leerLongRequerido("ID de categoria: ");
+        if (categoriaId == null) {
+            return;
+        }
+
+        List<Producto> productos = productoRepository.buscarPorCategoria(categoriaId);
+        if (productos.isEmpty()) {
+            System.out.println("No hay productos activos para la categoria seleccionada.");
+            return;
+        }
+
+        System.out.println("Productos encontrados:");
+        for (Producto producto : productos) {
+            System.out.printf("ID: %d | Nombre: %s | Precio: %.2f | Stock: %d%n",
+                    producto.getId(),
+                    valorSeguro(producto.getNombre()),
+                    producto.getPrecio(),
+                    producto.getStock());
+        }
+    }
+
+    private static Long leerLongRequerido(String mensaje) {
+        System.out.print(mensaje);
+        String texto = SCANNER.nextLine().trim();
+        Long valor = parseLong(texto);
+        if (valor == null) {
+            System.out.println("Entrada invalida. Debe ingresar un numero entero.");
+        }
+        return valor;
+    }
+
+    private static Double leerDoubleRequerido(String mensaje) {
+        System.out.print(mensaje);
+        String texto = SCANNER.nextLine().trim();
+        Double valor = parseDouble(texto);
+        if (valor == null) {
+            System.out.println("Entrada invalida. Debe ingresar un numero decimal.");
+        }
+        return valor;
+    }
+
+    private static Integer leerIntegerRequerido(String mensaje) {
+        System.out.print(mensaje);
+        String texto = SCANNER.nextLine().trim();
+        Integer valor = parseInteger(texto);
+        if (valor == null) {
+            System.out.println("Entrada invalida. Debe ingresar un numero entero.");
+        }
+        return valor;
+    }
+
+    private static Long parseLong(String texto) {
+        try {
+            return Long.parseLong(texto);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private static Double parseDouble(String texto) {
+        try {
+            return Double.parseDouble(texto);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private static Integer parseInteger(String texto) {
+        try {
+            return Integer.parseInt(texto);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private static String valorSeguro(Object valor) {
+        return valor == null ? "" : String.valueOf(valor);
+    }
 }

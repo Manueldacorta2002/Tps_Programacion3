@@ -44,11 +44,12 @@ sourceSets {
 }
 
 application {
-    mainClass = 'com.utn.SpringTpApplication'
+    mainClass = 'com.utn.Main'
 }
 
 run {
     jvmArgs = ['-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8']
+    standardInput = System.in
 }
 
 tasks.register('runJpa', JavaExec) {
