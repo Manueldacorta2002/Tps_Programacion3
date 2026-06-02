@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍔</text></svg>">
+    <link rel="icon" href="/favicon.svg">
     <title>Food Store - Carrito</title>
 </head>
 
 <body>
     <header>
         <div class="brand">
-            <h1>🛒 Mi Carrito</h1>
+            <h1>Mi Carrito</h1>
             <span class="subtitle">Revisá lo que elegiste</span>
         </div>
         <nav>
@@ -31,30 +31,72 @@
     <!-- Modal confirmación de pedido -->
     <div id="confirmModal" class="modal-overlay" aria-hidden="true">
       <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <div class="modal-icon">🎉</div>
-        <h2 id="modalTitle" class="modal-title">¡Tu pedido fue confirmado!</h2>
-        <p class="modal-subtitle">Gracias por tu compra. Estamos preparando todo para vos.</p>
 
-        <div class="modal-summary">
-          <h3 class="modal-summary-title">Resumen del pedido</h3>
-          <div class="modal-summary-row">
-            <span>Productos</span>
-            <span id="modalItemCount">—</span>
+        <!-- ETAPA 1: Selección de forma de pago -->
+        <div id="modalStage1">
+          <div class="modal-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
           </div>
-          <div class="modal-summary-row">
-            <span>Total</span>
-            <span id="modalTotal">—</span>
+          <h2 id="modalTitle" class="modal-title">Confirmar pedido</h2>
+
+          <div class="modal-summary">
+            <h3 class="modal-summary-title">Resumen del pedido</h3>
+            <div class="modal-summary-row">
+              <span>Productos</span>
+              <span id="modalItemCount">—</span>
+            </div>
+            <div class="modal-summary-row">
+              <span>Total</span>
+              <span id="modalTotal">—</span>
+            </div>
           </div>
-          <div class="modal-summary-row">
-            <span>Estado</span>
-            <span class="modal-status">✓ Confirmado</span>
+
+          <div class="form-group" style="margin-top: 16px;">
+            <label for="formaPago" style="display:block;font-size:0.85rem;font-weight:600;color:#555;margin-bottom:6px;">Forma de pago</label>
+            <select id="formaPago" style="width:100%;padding:10px 12px;border:2px solid #e0d6cf;border-radius:8px;font-size:0.92rem;font-family:inherit;background:white;">
+              <option value="TARJETA">Tarjeta</option>
+              <option value="TRANSFERENCIA">Transferencia</option>
+              <option value="EFECTIVO">Efectivo</option>
+            </select>
+          </div>
+
+          <div id="modalError" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;color:#dc2626;font-size:0.85rem;padding:10px 12px;margin-top:12px;"></div>
+
+          <div class="modal-actions" style="margin-top: 20px;">
+            <button id="btnPagar" class="btn-primary modal-btn-confirm">Pagar</button>
+            <button id="modalCancel" class="btn-secondary modal-btn-close">Cancelar</button>
           </div>
         </div>
 
-        <div class="modal-actions">
-          <a href="../home/home.html" class="btn-back modal-btn-menu">Volver al menú</a>
-          <button id="modalClose" class="btn-secondary modal-btn-close">Cerrar</button>
+        <!-- ETAPA 2: Pedido confirmado -->
+        <div id="modalStage2" style="display:none;">
+          <div class="modal-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h2 class="modal-title">¡Pedido confirmado!</h2>
+          <p class="modal-subtitle">Gracias por tu compra. Estamos preparando todo para vos.</p>
+
+          <div class="modal-summary">
+            <div class="modal-summary-row">
+              <span>Total pagado</span>
+              <span id="modalTotalFinal">—</span>
+            </div>
+            <div class="modal-summary-row">
+              <span>Forma de pago</span>
+              <span id="modalFormaPagoFinal">—</span>
+            </div>
+            <div class="modal-summary-row">
+              <span>Estado</span>
+              <span class="modal-status">✓ Pendiente</span>
+            </div>
+          </div>
+
+          <div class="modal-actions" style="margin-top: 20px;">
+            <a href="../orders/orders.html" class="btn-primary modal-btn-confirm">Mis pedidos</a>
+            <a href="../home/home.html" class="btn-secondary modal-btn-close">Volver al menú</a>
+          </div>
         </div>
+
       </div>
     </div>
 
@@ -62,3 +104,4 @@
 </body>
 
 </html>
+

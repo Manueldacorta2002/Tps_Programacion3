@@ -15,7 +15,10 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class DetallePedido extends Base {
 
+    @Column(nullable = false)
     private Integer cantidad;
+
+    @Column(nullable = false)
     private Double subtotal;
 
     @ManyToOne(fetch = FetchType.LAZY)

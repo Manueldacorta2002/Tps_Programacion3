@@ -1,45 +1,50 @@
 import "./login.css";
+import { api } from "../../../api/api";
 import type { IUser } from "../../../types/IUser";
-import type { Rol } from "../../../types/Rol";
-import { navigate } from "../../../utils/navigate";
 import { saveUser } from "../../../utils/localStorage";
+import { navigate } from "../../../utils/navigate";
 
 const form = document.getElementById("form") as HTMLFormElement;
 const inputEmail = document.getElementById("email") as HTMLInputElement;
-//const inputPassword = document.getElementById("password") as HTMLInputElement;
-const inputRol = document.getElementById("rol") as HTMLInputElement;
-const roleButtons = document.querySelectorAll(".role-btn");
+const inputPassword = document.getElementById("password") as HTMLInputElement;
+const btnLogin = document.getElementById("btnLogin") as HTMLButtonElement;
+const errorMsg = document.getElementById("errorMsg") as HTMLDivElement;
 
-/* MEJORA: selector visual que mantiene el valor en el input oculto #rol */
-const selectRol = (button: Element) => {
-  roleButtons.forEach((currentButton) => currentButton.classList.remove("active"));
-  button.classList.add("active");
-  inputRol.value = (button as HTMLButtonElement).dataset.role as Rol;
+const showError = (msg: string) => {
+  errorMsg.textContent = msg;
+  errorMsg.style.display = "block";
 };
 
-roleButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    selectRol(button);
-  });
-});
+const setLoading = (loading: boolean) => {
+  btnLogin.disabled = loading;
+  btnLogin.textContent = loading ? "Ingresando..." : "Ingresar";
+};
 
-form.addEventListener("submit", (e: SubmitEvent) => {
+form.addEventListener("submit", async (e: SubmitEvent) => {
   e.preventDefault();
-  const valueEmail = inputEmail.value.trim().toLowerCase();
-  //const valuePassword = inputPassword.value;
-  const valueRol = inputRol.value as Rol;
+  errorMsg.style.display = "none";
 
-  const user: IUser = {
-    email: valueEmail,
-    role: valueRol,
-    loggedIn: true,
-  };
+  const mail = inputEmail.value.trim().toLowerCase();
+  const contrasenia = inputPassword.value;
 
-  saveUser(user);
+  if (!mail || !contrasenia) {
+    showError("Completá email y contraseña para continuar.");
+    return;
+  }
 
-  if (valueRol === "admin") {
-    navigate("/src/pages/admin/home/home.html");
-  } else if (valueRol === "client") {
-    navigate("/src/pages/store/home/home.html");
+  setLoading(true);
+  try {
+    const user = await api.post<IUser>("/auth/login", { mail, contrasenia });
+    saveUser(user);
+    if (user.rol === "ADMIN") {
+      navigate("/src/pages/admin/home/home.html");
+    } else {
+      navigate("/src/pages/store/home/home.html");
+    }
+  } catch (err) {
+    showError(err instanceof Error ? err.message : "Credenciales incorrectas.");
+  } finally {
+    setLoading(false);
   }
 });
+

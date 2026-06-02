@@ -19,18 +19,24 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Usuario extends Base {
 
+    @Column(nullable = false)
     private String nombre;
+
+    @Column(nullable = false)
     private String apellido;
 
     @Column(unique = true, nullable = false)
     private String mail;
 
+    @Column(nullable = false)
     private String celular;
 
     @ToString.Exclude
+    @Column(nullable = false)
     private String contrasenia;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Rol rol;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)

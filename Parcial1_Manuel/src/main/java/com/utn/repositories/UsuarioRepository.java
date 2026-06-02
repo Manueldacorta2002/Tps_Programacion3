@@ -3,9 +3,12 @@ package com.utn.repositories;
 import com.utn.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Optional<Usuario> findByMail(String mail);
+    Optional<Usuario> findByMailAndEliminadoFalse(String mail);
+    boolean existsByMailAndEliminadoFalse(String mail);
+    List<Usuario> findAllByEliminadoFalse();
+    Optional<Usuario> findByIdAndEliminadoFalse(Long id);
 }
-

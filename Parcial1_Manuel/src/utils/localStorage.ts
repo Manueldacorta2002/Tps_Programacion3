@@ -1,12 +1,25 @@
 import type { IUser } from "../types/IUser";
 
-export const saveUser = (user: IUser) => {
-  const parseUser = JSON.stringify(user);
-  localStorage.setItem("userData", parseUser);
+const USER_KEY = "userData";
+
+export const saveUser = (user: IUser): void => {
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
 };
-export const getUSer = () => {
-  return localStorage.getItem("userData");
+
+export const getCurrentUser = (): IUser | null => {
+  const raw = localStorage.getItem(USER_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as IUser;
+  } catch {
+    return null;
+  }
 };
-export const removeUser = () => {
-  localStorage.removeItem("userData");
+
+/** @deprecated Use getCurrentUser() */
+export const getUSer = (): string | null => localStorage.getItem(USER_KEY);
+
+export const removeUser = (): void => {
+  localStorage.removeItem(USER_KEY);
 };
+

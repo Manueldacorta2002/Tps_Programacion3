@@ -6,9 +6,29 @@ import {
   clearCart,
 } from "../../../utils/cart";
 import type { CartItem } from "../../../utils/cart";
+import { api } from "../../../api/api";
+import type { PedidoCreate, FormaPago } from "../../../types/pedido";
+import { getCurrentUser } from "../../../utils/localStorage";
+import { logout } from "../../../utils/auth";
+import pizzaUrl from "../../../assets/products/pizza.svg";
+import burgerUrl from "../../../assets/products/burger.svg";
+import drinkUrl from "../../../assets/products/drink.svg";
+import dessertUrl from "../../../assets/products/dessert.svg";
+import foodDefaultUrl from "../../../assets/products/default-food.svg";
 
 const cartContent = document.getElementById("cartContent") as HTMLDivElement;
 const logoutBtn = document.getElementById("logoutButton") as HTMLButtonElement;
+const modal = document.getElementById("confirmModal") as HTMLDivElement;
+const modalStage1 = document.getElementById("modalStage1") as HTMLDivElement;
+const modalStage2 = document.getElementById("modalStage2") as HTMLDivElement;
+const modalItemCount = document.getElementById("modalItemCount") as HTMLSpanElement;
+const modalTotal = document.getElementById("modalTotal") as HTMLSpanElement;
+const modalTotalFinal = document.getElementById("modalTotalFinal") as HTMLSpanElement;
+const modalFormaPagoFinal = document.getElementById("modalFormaPagoFinal") as HTMLSpanElement;
+const formaPagoSelect = document.getElementById("formaPago") as HTMLSelectElement;
+const btnPagar = document.getElementById("btnPagar") as HTMLButtonElement;
+const modalCancel = document.getElementById("modalCancel") as HTMLButtonElement;
+const modalError = document.getElementById("modalError") as HTMLDivElement;
 
 // Pequeño efecto visual al cambiar cantidad
 const bumpQuantity = (btn: HTMLElement) => {
@@ -20,18 +40,27 @@ const bumpQuantity = (btn: HTMLElement) => {
   }
 };
 
-// Emojis por nombre de producto
-const productEmojis: Record<string, string> = {
-  Hamburguesa: "🍔",
-  "Hamburguesa Doble": "🍔",
-  Pizza: "🍕",
-  "Papas Fritas": "🍟",
-  Bebida: "🥤",
-  Agua: "🍾",
-  Combo: "🍱",
-  "Combo Familiar": "🥘",
-  Empanada: "🥟",
-  Helado: "🍦",
+const getProductImageByName = (name: string): string => {
+  const n = name.toLowerCase();
+  if (n.includes("pizza")) return pizzaUrl;
+  if (n.includes("burger") || n.includes("hamburguesa")) return burgerUrl;
+  if (n.includes("coca") || n.includes("agua") || n.includes("jugo") || n.includes("gaseosa")) return drinkUrl;
+  if (n.includes("tiramisú") || n.includes("tiramisu") || n.includes("brownie") || n.includes("helado")) return dessertUrl;
+  return foodDefaultUrl;
+};
+
+const openModal = () => {
+  modalStage1.style.display = "block";
+  modalStage2.style.display = "none";
+  modal.classList.add("modal-visible");
+  modal.setAttribute("aria-hidden", "false");
+  modalError.style.display = "none";
+};
+
+const closeModal = () => {
+  modal.classList.remove("modal-visible");
+  modal.setAttribute("aria-hidden", "true");
+  renderCart();
 };
 
 // Renderizar el carrito completo
@@ -41,7 +70,9 @@ const renderCart = () => {
   if (cart.length === 0) {
     cartContent.innerHTML = `
       <div class="cart-empty">
-        <div class="cart-empty-icon">🛒</div>
+        <div class="cart-empty-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        </div>
         <p class="cart-empty-title">Tu carrito está vacío</p>
         <p class="cart-empty-hint">Agregá algo rico del catálogo</p>
         <a href="../home/home.html" class="btn-back">Ver productos</a>
@@ -54,10 +85,10 @@ const renderCart = () => {
 
   cart.forEach((item: CartItem) => {
     const subtotal = item.price * item.quantity;
-    const emoji = productEmojis[item.name] || "🍽️";
+    const imgSrc = getProductImageByName(item.name);
     html += `
       <div class="cart-item" data-id="${item.id}">
-        <div class="item-emoji">${emoji}</div>
+        <img class="item-img" src="${imgSrc}" alt="${item.name}">
         <div class="item-info">
           <h3>${item.name}</h3>
           <p class="item-price">$${item.price.toLocaleString("es-AR")} c/u</p>
@@ -133,55 +164,67 @@ const renderCart = () => {
   btnConfirm?.addEventListener("click", () => {
     const cart = getCart();
     if (cart.length === 0) return;
-
-    // Calcular totales para mostrar en el modal
     const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
     const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-    // Rellenar datos del modal
-    const modalItemCount = document.getElementById("modalItemCount");
-    const modalTotal = document.getElementById("modalTotal");
-    if (modalItemCount) modalItemCount.textContent = `${itemCount} ${itemCount === 1 ? "producto" : "productos"}`;
-    if (modalTotal) modalTotal.textContent = `$${total.toLocaleString("es-AR")}`;
-
-    // Mostrar modal
-    const modal = document.getElementById("confirmModal");
-    if (modal) {
-      modal.classList.add("modal-visible");
-      modal.setAttribute("aria-hidden", "false");
-    }
-
-    // Vaciar carrito
-    clearCart();
+    modalItemCount.textContent = `${itemCount} ${itemCount === 1 ? "producto" : "productos"}`;
+    modalTotal.textContent = `$${total.toLocaleString("es-AR")}`;
+    openModal();
   });
 };
 
-// Botón cerrar del modal
-document.getElementById("modalClose")?.addEventListener("click", () => {
-  const modal = document.getElementById("confirmModal");
-  if (modal) {
-    modal.classList.remove("modal-visible");
-    modal.setAttribute("aria-hidden", "true");
+// Botón "Pagar": POST /api/orders
+btnPagar.addEventListener("click", async () => {
+  const cart = getCart();
+  if (cart.length === 0) return;
+
+  const user = getCurrentUser();
+  if (!user) {
+    modalError.textContent = "Sesión expirada. Por favor, iniciá sesión nuevamente.";
+    modalError.style.display = "block";
+    return;
   }
-  renderCart(); // Refresca para mostrar carrito vacío
+
+  const formaPago = formaPagoSelect.value as FormaPago;
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const payload: PedidoCreate = {
+    formaPago,
+    usuarioId: user.id,
+    detalles: cart.map((item) => ({ cantidad: item.quantity, productoId: item.id })),
+  };
+
+  btnPagar.disabled = true;
+  btnPagar.textContent = "Procesando...";
+  modalError.style.display = "none";
+
+  try {
+    await api.post("/orders", payload);
+    clearCart();
+    modalTotalFinal.textContent = `$${total.toLocaleString("es-AR")}`;
+    const labels: Record<FormaPago, string> = { TARJETA: "Tarjeta", TRANSFERENCIA: "Transferencia", EFECTIVO: "Efectivo" };
+    modalFormaPagoFinal.textContent = labels[formaPago];
+    modalStage1.style.display = "none";
+    modalStage2.style.display = "block";
+  } catch (err) {
+    modalError.textContent = err instanceof Error ? err.message : "No se pudo procesar el pedido. Intentá de nuevo.";
+    modalError.style.display = "block";
+  } finally {
+    btnPagar.disabled = false;
+    btnPagar.textContent = "Pagar";
+  }
 });
 
-// Cerrar modal al hacer click en el overlay (fuera de la caja)
-document.getElementById("confirmModal")?.addEventListener("click", (e) => {
-  if ((e.target as HTMLElement).id === "confirmModal") {
-    const modal = document.getElementById("confirmModal");
-    if (modal) {
-      modal.classList.remove("modal-visible");
-      modal.setAttribute("aria-hidden", "true");
-    }
-    renderCart();
-  }
+// Cancelar modal
+modalCancel.addEventListener("click", closeModal);
+
+// Cerrar modal al hacer click en el overlay
+modal.addEventListener("click", (e) => {
+  if ((e.target as HTMLElement).id === "confirmModal") closeModal();
 });
 
-// Salir: vuelve al catálogo
-logoutBtn.addEventListener("click", () => {
-  window.location.href = "../home/home.html";
-});
+// Cerrar sesión
+logoutBtn.addEventListener("click", logout);
 
 // Inicializar
 renderCart();
+

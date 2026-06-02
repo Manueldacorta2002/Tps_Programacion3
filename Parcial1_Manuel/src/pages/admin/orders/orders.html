@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/favicon.svg">
+  <title>Food Store - Pedidos</title>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      <h1>Pedidos</h1>
+      <span class="subtitle">Panel de administración</span>
+    </div>
+    <nav>
+      <a href="../home/home.html" class="admin-btn-ghost">← Volver</a>
+      <button id="logoutButton">Salir</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="admin-toolbar">
+      <h2 class="section-title">Gestión de Pedidos</h2>
+      <div class="filter-group">
+        <label for="filterEstado">Filtrar por estado:</label>
+        <select id="filterEstado">
+          <option value="">Todos</option>
+          <option value="PENDIENTE">Pendiente</option>
+          <option value="CONFIRMADO">Confirmado</option>
+          <option value="TERMINADO">Terminado</option>
+          <option value="CANCELADO">Cancelado</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="tableContainer"></div>
+  </main>
+
+  <footer>
+    <p>Proyecto Programación 3 — Manuel Da Cortá — 2026</p>
+  </footer>
+
+  <script type="module" src="./orders.ts"></script>
+</body>
+
+</html>

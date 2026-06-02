@@ -2,7 +2,10 @@ package com.utn.services;
 
 import com.utn.dtos.categoria.CategoriaCreate;
 import com.utn.dtos.categoria.CategoriaDto;
+import com.utn.dtos.categoria.CategoriaEdit;
 import com.utn.entities.Categoria;
+import com.utn.exceptions.BusinessException;
+import com.utn.exceptions.ResourceNotFoundException;
 import com.utn.repositories.CategoriaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,32 +23,50 @@ public class CategoriaService {
 
     @Transactional
     public CategoriaDto crear(CategoriaCreate dto) {
+        if (categoriaRepository.existsByNombreIgnoreCaseAndEliminadoFalse(dto.nombre())) {
+            throw new BusinessException("Ya existe una categoria con ese nombre");
+        }
+
         Categoria categoria = Categoria.builder()
                 .nombre(dto.nombre())
                 .descripcion(dto.descripcion())
                 .build();
 
-        Categoria guardado = categoriaRepository.save(categoria);
-        return toDto(guardado);
+        return toDto(categoriaRepository.save(categoria));
+    }
+
+    @Transactional(readOnly = true)
+    public CategoriaDto buscarPorId(Long id) {
+        return toDto(findEntityById(id));
     }
 
     @Transactional(readOnly = true)
     public Categoria findEntityById(Long id) {
-        return categoriaRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Categoria no encontrada id=" + id));
+        return categoriaRepository.findByIdAndEliminadoFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria no encontrada con id " + id));
     }
 
     @Transactional(readOnly = true)
     public List<CategoriaDto> listarTodos() {
-        return categoriaRepository.findAll().stream().map(this::toDto).toList();
+        return categoriaRepository.findAllByEliminadoFalse().stream().map(this::toDto).toList();
+    }
+
+    @Transactional
+    public CategoriaDto actualizar(Long id, CategoriaEdit dto) {
+        Categoria categoria = findEntityById(id);
+        categoria.setNombre(dto.nombre());
+        categoria.setDescripcion(dto.descripcion());
+        return toDto(categoriaRepository.save(categoria));
+    }
+
+    @Transactional
+    public void eliminar(Long id) {
+        Categoria categoria = findEntityById(id);
+        categoria.setEliminado(true);
+        categoriaRepository.save(categoria);
     }
 
     private CategoriaDto toDto(Categoria c) {
-        return new CategoriaDto(
-                c.getId(),
-                c.getNombre(),
-                c.getDescripcion()
-        );
+        return new CategoriaDto(c.getId(), c.getNombre(), c.getDescripcion());
     }
 }
-

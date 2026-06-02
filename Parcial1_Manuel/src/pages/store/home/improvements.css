@@ -633,12 +633,6 @@ footer {
   color: var(--store-muted);
 }
 
-footer p:first-child {
-  margin-bottom: 8px;
-  color: var(--store-ink);
-  font-weight: 600;
-}
-
 /* MEJORA: ajustes responsivos para mantener 2 columnas en mobile */
 @media (max-width: 1080px) {
   .hero-section,

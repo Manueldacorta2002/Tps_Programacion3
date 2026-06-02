@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <!-- Cup body -->
+  <path d="M20 26 L24 68 Q24 72 28 72 L52 72 Q56 72 56 68 L60 26 Z" fill="#e3f2fd"/>
+  <path d="M20 26 L24 68 Q24 72 28 72 L52 72 Q56 72 56 68 L60 26 Z" fill="#29b6f6" opacity="0.55"/>
+  <!-- Liquid fill -->
+  <path d="M22 36 L25.5 68 Q25.5 70 28 70 L52 70 Q54.5 70 54.5 68 L58 36 Z" fill="#0288d1" opacity="0.6"/>
+  <!-- Lid -->
+  <rect x="17" y="21" width="46" height="7" rx="3.5" fill="#b0bec5"/>
+  <!-- Straw -->
+  <rect x="38" y="4" width="5" height="35" rx="2.5" fill="#f06292"/>
+  <!-- Shine on cup -->
+  <path d="M26 32 L27.5 55" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+  <!-- Bubbles -->
+  <circle cx="35" cy="52" r="3" fill="white" opacity="0.4"/>
+  <circle cx="44" cy="44" r="2" fill="white" opacity="0.35"/>
+</svg>

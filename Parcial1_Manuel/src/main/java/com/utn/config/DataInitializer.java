@@ -1,172 +1,200 @@
 package com.utn.config;
 
-import com.utn.dtos.categoria.CategoriaCreate;
-import com.utn.dtos.categoria.CategoriaDto;
-import com.utn.dtos.detallePedido.DetallePedidoCreate;
-import com.utn.dtos.pedido.PedidoDto;
-import com.utn.dtos.pedido.PedidoEdit;
-import com.utn.dtos.producto.ProductoCreate;
-import com.utn.dtos.producto.ProductoDto;
-import com.utn.dtos.usuario.UsuarioCreate;
-import com.utn.dtos.usuario.UsuarioDto;
-import com.utn.enums.Estado;
-import com.utn.enums.FormaPago;
+import com.utn.entities.Categoria;
+import com.utn.entities.Producto;
+import com.utn.entities.Usuario;
 import com.utn.enums.Rol;
-import com.utn.services.CategoriaService;
-import com.utn.services.PedidoService;
-import com.utn.services.ProductoService;
-import com.utn.services.UsuarioService;
+import com.utn.repositories.CategoriaRepository;
+import com.utn.repositories.ProductoRepository;
+import com.utn.repositories.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
 
-    private final UsuarioService usuarioService;
-    private final CategoriaService categoriaService;
-    private final ProductoService productoService;
-    private final PedidoService pedidoService;
+    private final UsuarioRepository usuarioRepository;
+    private final CategoriaRepository categoriaRepository;
+    private final ProductoRepository productoRepository;
 
-    public DataInitializer(UsuarioService usuarioService,
-                            CategoriaService categoriaService,
-                            ProductoService productoService,
-                            PedidoService pedidoService) {
-        this.usuarioService = usuarioService;
-        this.categoriaService = categoriaService;
-        this.productoService = productoService;
-        this.pedidoService = pedidoService;
+    public DataInitializer(UsuarioRepository usuarioRepository,
+                           CategoriaRepository categoriaRepository,
+                           ProductoRepository productoRepository) {
+        this.usuarioRepository = usuarioRepository;
+        this.categoriaRepository = categoriaRepository;
+        this.productoRepository = productoRepository;
     }
 
     @Override
+    @Transactional
     public void run(String... args) {
-        if (usuarioService.contar() > 0) {
-            System.out.println("Datos ya inicializados, omitiendo carga en Spring.");
-            return;
+        crearUsuarios();
+        crearCategorias();
+    }
+
+    private void crearUsuarios() {
+        if (usuarioRepository.findByMailAndEliminadoFalse("admin@admin.com").isEmpty()) {
+            usuarioRepository.save(Usuario.builder()
+                    .nombre("Admin")
+                    .apellido("Food Store")
+                    .mail("admin@admin.com")
+                    .celular("2610000000")
+                    .contrasenia(PasswordEncoderUtil.encode("123456"))
+                    .rol(Rol.ADMIN)
+                    .build());
         }
 
-        // ==================== USUARIOS ====================
-        UsuarioDto usuario1 = usuarioService.crear(new UsuarioCreate(
-                "Manuel",
-                "García",
-                "manuel@foodstore.com",
-                "2615001001",
-                "admin123",
-                Rol.ADMIN
-        ));
+        if (usuarioRepository.findByMailAndEliminadoFalse("cliente@foodstore.com").isEmpty()) {
+            usuarioRepository.save(Usuario.builder()
+                    .nombre("Cliente")
+                    .apellido("Prueba")
+                    .mail("cliente@foodstore.com")
+                    .celular("2610000001")
+                    .contrasenia(PasswordEncoderUtil.encode("123456"))
+                    .rol(Rol.USUARIO)
+                    .build());
+        }
+    }
 
-        UsuarioDto usuario2 = usuarioService.crear(new UsuarioCreate(
-                "Laura",
-                "Martínez",
-                "laura@foodstore.com",
-                "2615002002",
-                "cliente456",
-                Rol.USUARIO
-        ));
+    private void crearCategorias() {
+        if (!categoriaRepository.findAllByEliminadoFalse().isEmpty()) {
+            return; // Ya hay datos, no duplicar
+        }
 
-        System.out.println("Usuarios persistidos: id1=" + usuario1.id() + ", id2=" + usuario2.id());
+        Categoria pizzas = categoriaRepository.save(Categoria.builder()
+                .nombre("Pizzas")
+                .descripcion("Las mejores pizzas artesanales")
+                .build());
 
-        // ==================== CATEGORÍAS ====================
-        CategoriaDto hamburguesas = categoriaService.crear(new CategoriaCreate(
-                "Hamburguesas",
-                "Hamburguesas artesanales a la parrilla"
-        ));
-        CategoriaDto pizzas = categoriaService.crear(new CategoriaCreate(
-                "Pizzas",
-                "Pizzas a la piedra con ingredientes frescos"
-        ));
-        CategoriaDto bebidas = categoriaService.crear(new CategoriaCreate(
-                "Bebidas",
-                "Gaseosas, aguas y jugos"
-        ));
+        Categoria hamburguesas = categoriaRepository.save(Categoria.builder()
+                .nombre("Hamburguesas")
+                .descripcion("Hamburguesas gourmet con ingredientes frescos")
+                .build());
 
-        System.out.println("Categorías persistidas correctamente.");
+        Categoria bebidas = categoriaRepository.save(Categoria.builder()
+                .nombre("Bebidas")
+                .descripcion("Refrescos, jugos y bebidas frias")
+                .build());
 
-        // ==================== PRODUCTOS ====================
-        ProductoDto p1 = productoService.crear(new ProductoCreate(
-                "Hamburguesa Clásica", 1500.0, "Medallón de carne con lechuga, tomate y mayonesa", 20,
-                "burger-classic.png", true, hamburguesas.id()
-        ));
-        ProductoDto p2 = productoService.crear(new ProductoCreate(
-                "Hamburguesa Doble", 2200.0, "Dos medallones, doble queso y bacon", 15,
-                "burger-doble.png", true, hamburguesas.id()
-        ));
-        ProductoDto p3 = productoService.crear(new ProductoCreate(
-                "Hamburguesa Veggie", 1800.0, "Medallón de garbanzo con verduras y pesto", 10,
-                "burger-veggie.png", true, hamburguesas.id()
-        ));
-        ProductoDto p4 = productoService.crear(new ProductoCreate(
-                "Pizza Muzzarella", 2500.0, "Tomate, mozzarella y albahaca", 12,
-                "pizza-muzza.png", true, pizzas.id()
-        ));
-        ProductoDto p5 = productoService.crear(new ProductoCreate(
-                "Pizza Pepperoni", 3000.0, "Salsa, queso y pepperoni importado", 8,
-                "pizza-pepperoni.png", true, pizzas.id()
-        ));
-        ProductoDto p6 = productoService.crear(new ProductoCreate(
-                "Pizza Napolitana", 2800.0, "Tomate, mozzarella, ajo y aceite de oliva", 10,
-                "pizza-napo.png", true, pizzas.id()
-        ));
-        ProductoDto p7 = productoService.crear(new ProductoCreate(
-                "Papas Fritas", 900.0, "Papas crujientes con sal y salsa a elección", 30,
-                "fries.png", true, hamburguesas.id()
-        ));
-        ProductoDto p8 = productoService.crear(new ProductoCreate(
-                "Gaseosa", 700.0, "Gaseosa 500ml a elección", 50,
-                "soda.png", true, bebidas.id()
-        ));
-        ProductoDto p9 = productoService.crear(new ProductoCreate(
-                "Agua Mineral", 400.0, "Agua mineral sin gas 500ml", 60,
-                "water.png", true, bebidas.id()
-        ));
-        ProductoDto p10 = productoService.crear(new ProductoCreate(
-                "Combo Familiar", 6500.0, "2 hamburguesas + 1 pizza + 4 bebidas", 5,
-                "combo-familiar.png", true, hamburguesas.id()
-        ));
+        Categoria postres = categoriaRepository.save(Categoria.builder()
+                .nombre("Postres")
+                .descripcion("Dulces y postres para el final")
+                .build());
 
-        System.out.println("Productos persistidos: 10 items.");
+        // Pizzas
+        productoRepository.save(Producto.builder()
+                .nombre("Pizza Mozzarella")
+                .precio(1200.0)
+                .descripcion("Pizza clasica con salsa de tomate y mozzarella")
+                .stock(50)
+                .disponible(true)
+                .imagen("pizza_mozzarella.jpg")
+                .categoria(pizzas)
+                .build());
 
-        // ==================== PEDIDOS (mínimo 2 detalles cada uno) ====================
-        PedidoDto pedido1 = pedidoService.crear(new PedidoEdit(
-                LocalDate.of(2025, 5, 1),
-                Estado.CONFIRMADO,
-                FormaPago.TARJETA,
-                usuario1.id(),
-                List.of(
-                        new DetallePedidoCreate(2, p1.id()),
-                        new DetallePedidoCreate(1, p8.id())
-                )
-        ));
+        productoRepository.save(Producto.builder()
+                .nombre("Pizza Napolitana")
+                .precio(1400.0)
+                .descripcion("Pizza con tomate fresco, mozzarella y oregano")
+                .stock(50)
+                .disponible(true)
+                .imagen("pizza_napolitana.jpg")
+                .categoria(pizzas)
+                .build());
 
-        PedidoDto pedido2 = pedidoService.crear(new PedidoEdit(
-                LocalDate.of(2025, 5, 3),
-                Estado.TERMINADO,
-                FormaPago.EFECTIVO,
-                usuario1.id(),
-                List.of(
-                        new DetallePedidoCreate(1, p4.id()),
-                        new DetallePedidoCreate(1, p5.id()),
-                        new DetallePedidoCreate(3, p9.id())
-                )
-        ));
+        productoRepository.save(Producto.builder()
+                .nombre("Pizza Cuatro Quesos")
+                .precio(1600.0)
+                .descripcion("Pizza con mozzarella, provolone, roquefort y parmesano")
+                .stock(30)
+                .disponible(true)
+                .imagen("pizza_cuatro_quesos.jpg")
+                .categoria(pizzas)
+                .build());
 
-        PedidoDto pedido3 = pedidoService.crear(new PedidoEdit(
-                LocalDate.of(2025, 5, 5),
-                Estado.PENDIENTE,
-                FormaPago.TRANSFERENCIA,
-                usuario2.id(),
-                List.of(
-                        new DetallePedidoCreate(1, p10.id()),
-                        new DetallePedidoCreate(2, p8.id())
-                )
-        ));
+        // Hamburguesas
+        productoRepository.save(Producto.builder()
+                .nombre("Hamburguesa Clasica")
+                .precio(950.0)
+                .descripcion("Pan brioche, carne 200g, lechuga, tomate y mayonesa")
+                .stock(40)
+                .disponible(true)
+                .imagen("hamburguesa_clasica.jpg")
+                .categoria(hamburguesas)
+                .build());
 
-        System.out.println("Pedidos persistidos correctamente.");
-        System.out.println("Pedido1 total: " + pedido1.total());
-        System.out.println("Pedido2 total: " + pedido2.total());
-        System.out.println("Pedido3 total: " + pedido3.total());
+        productoRepository.save(Producto.builder()
+                .nombre("Hamburguesa BBQ")
+                .precio(1100.0)
+                .descripcion("Carne 200g, bacon, cheddar y salsa BBQ ahumada")
+                .stock(40)
+                .disponible(true)
+                .imagen("hamburguesa_bbq.jpg")
+                .categoria(hamburguesas)
+                .build());
+
+        productoRepository.save(Producto.builder()
+                .nombre("Veggie Burger")
+                .precio(900.0)
+                .descripcion("Medallón de garbanzos, rúcula, tomate y hummus")
+                .stock(25)
+                .disponible(true)
+                .imagen("veggie_burger.jpg")
+                .categoria(hamburguesas)
+                .build());
+
+        // Bebidas
+        productoRepository.save(Producto.builder()
+                .nombre("Coca-Cola 500ml")
+                .precio(350.0)
+                .descripcion("Gaseosa Coca-Cola botella 500ml")
+                .stock(100)
+                .disponible(true)
+                .imagen("coca_cola.jpg")
+                .categoria(bebidas)
+                .build());
+
+        productoRepository.save(Producto.builder()
+                .nombre("Agua Mineral 500ml")
+                .precio(200.0)
+                .descripcion("Agua mineral sin gas 500ml")
+                .stock(100)
+                .disponible(true)
+                .imagen("agua_mineral.jpg")
+                .categoria(bebidas)
+                .build());
+
+        productoRepository.save(Producto.builder()
+                .nombre("Jugo de Naranja Natural")
+                .precio(450.0)
+                .descripcion("Jugo de naranja exprimido al momento, 400ml")
+                .stock(30)
+                .disponible(true)
+                .imagen("jugo_naranja.jpg")
+                .categoria(bebidas)
+                .build());
+
+        // Postres
+        productoRepository.save(Producto.builder()
+                .nombre("Tiramisú")
+                .precio(700.0)
+                .descripcion("Tiramisú casero con mascarpone y café")
+                .stock(20)
+                .disponible(true)
+                .imagen("tiramisu.jpg")
+                .categoria(postres)
+                .build());
+
+        productoRepository.save(Producto.builder()
+                .nombre("Brownie con Helado")
+                .precio(650.0)
+                .descripcion("Brownie de chocolate caliente con helado de vainilla")
+                .stock(25)
+                .disponible(true)
+                .imagen("brownie.jpg")
+                .categoria(postres)
+                .build());
     }
 }
 

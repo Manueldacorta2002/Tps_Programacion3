@@ -1,51 +1,160 @@
-# Parcial 2 - Programacion III
+# Food Store - Sistema de Gestión de Pedidos de Comida
 
-## Descripcion breve
-Aplicacion de consola en Java con JPA (sin Spring Data) para gestionar ABM de categorias y productos con baja logica y consulta JPQL de productos por categoria.
-El menu de uso es por consola.
+## Descripción
 
-## Instrucciones para ejecutar
-Requisitos:
+En este trabajo desarrollé una aplicación web llamada Food Store. La idea principal es simular un sistema de pedidos de comida, donde un cliente puede registrarse, iniciar sesión, ver el catálogo de productos, agregar cosas al carrito y confirmar un pedido. El administrador, por otro lado, puede gestionar categorías, productos y pedidos desde un panel propio.
+
+El backend es una API REST hecha con Spring Boot y el frontend es un conjunto de páginas HTML con TypeScript y Vite.
+
+---
+
+## Tecnologías
+
+**Backend:**
+
 - Java 17
-- Gradle Wrapper (incluido en el proyecto)
+- Spring Boot
+- Spring Data JPA
+- H2 Database (base de datos en memoria)
+- Gradle
 
-Comandos (PowerShell):
-- .\gradlew.bat clean build
-- .\gradlew.bat run
+**Frontend:**
 
-Comandos (Git Bash):
-- ./gradlew.bat clean build
-- ./gradlew.bat run
+- TypeScript
+- Vite
+- HTML
+- CSS
 
-La base se configura con H2 file desde persistence.xml usando la unidad miUnidad.
+---
 
-## Funcionalidades implementadas
-- Repositorio base generico con:
-  - guardar (persistencia y actualizacion con merge)
-  - buscarPorId
-  - listarActivos (eliminado = false)
-  - eliminarLogico (eliminado = true)
-- Repositorio de categorias (hereda comportamiento base)
-- Repositorio de productos con:
-  - listar activos con categoria cargada
-  - consulta JPQL buscarPorCategoria con TypedQuery y parametro nombrado
-- Menu de consola con:
-  - Gestion de categorias: alta, baja logica, modificacion y listado
-  - Gestion de productos: alta, baja logica, modificacion y listado
-  - Reporte de productos por categoria
-- Validaciones de entrada:
-  - nombre no vacio
-  - precio mayor a 0
-  - stock mayor o igual a 0
-  - manejo de entradas invalidas sin romper ejecucion
+## Funcionalidades principales
 
-## Checklist HU-01 a HU-09
-- HU-01: BaseRepository<T> con CRUD generico, transacciones, Optional y cierre de EntityManager.
-- HU-02: CategoriaRepository y ProductoRepository, super(Class<T>) y buscarPorCategoria con JPQL.
-- HU-03: Alta de categoria.
-- HU-04: Modificacion de categoria.
-- HU-05: Baja logica de categoria.
-- HU-06: Alta de producto.
-- HU-07: Modificacion de producto.
-- HU-08: Baja logica de producto.
-- HU-09: Consulta JPQL productos por categoria.
+**Cliente:**
+
+- Registro e inicio de sesión
+- Catálogo de productos con búsqueda y filtro por categoría
+- Carrito de compras (guardado en localStorage)
+- Confirmación de pedido con selección de forma de pago
+- Historial de pedidos propios
+
+**Administrador:**
+
+- Dashboard con estadísticas generales
+- Gestión de categorías (crear, editar, eliminar)
+- Gestión de productos (crear, editar, eliminar)
+- Gestión de pedidos con cambio de estado
+
+---
+
+## Usuarios de prueba
+
+El proyecto carga datos automáticamente al iniciar. Se pueden usar estas cuentas:
+
+**Administrador:**
+
+- Email: <admin@admin.com>
+- Contraseña: 123456
+
+**Cliente:**
+
+- Email: <cliente@foodstore.com>
+- Contraseña: 123456
+
+---
+
+## Cómo ejecutar el proyecto
+
+### Backend
+
+Desde la carpeta raíz del proyecto (donde está `gradlew.bat`):
+
+```bash
+.\gradlew.bat bootRun
+```
+
+El servidor queda corriendo en <http://localhost:8080>
+
+### Frontend
+
+```bash
+npm install
+npm run dev
+```
+
+O si usás pnpm:
+
+```bash
+pnpm install
+pnpm dev
+```
+
+El frontend queda en <http://localhost:5173>
+
+---
+
+## URLs importantes
+
+- Frontend: <http://localhost:5173>
+- Backend: <http://localhost:8080>
+- Consola H2: <http://localhost:8080/h2-console>
+- Swagger UI: <http://localhost:8080/swagger-ui/index.html>
+
+---
+
+## Estructura del proyecto
+
+El backend está organizado por capas: `controllers`, `services`, `repositories`, `entities`, `dtos`, `enums`, `exceptions` y `config`.
+
+El frontend está separado en carpetas por tipo: `pages` (una carpeta por pantalla), `types` (interfaces TypeScript), `utils` (funciones de auth, carrito y navegación) y `api` (cliente HTTP centralizado).
+
+```text
+src/
+├── main/java/com/utn/       <- Backend
+│   ├── controllers/
+│   ├── services/
+│   ├── entities/
+│   ├── dtos/
+│   ├── repositories/
+│   └── config/
+├── api/                     <- Cliente HTTP
+├── types/                   <- Interfaces TS
+├── utils/                   <- auth, cart, localStorage
+└── pages/
+    ├── auth/                <- login, registro
+    ├── store/               <- catalogo, carrito, pedidos (cliente)
+    └── admin/               <- dashboard, categorias, productos, pedidos
+```
+
+---
+
+## Decisiones técnicas
+
+- Usé **localStorage** para guardar la sesión y el carrito porque es un proyecto educativo y no requería autenticación real con tokens.
+- Usé **DTOs** en el backend para no exponer información sensible como las contraseñas en las respuestas de la API.
+- Implementé **soft delete**: los registros no se borran físicamente, sino que se marcan con `eliminado = true` y se filtran en las consultas.
+- Separé el backend en capas (controller, service, repository) para que el código quede más ordenado y sea más fácil de mantener.
+- Usé **H2** como base de datos en memoria para que el proyecto se pueda correr sin configurar nada extra.
+
+---
+
+## Aclaración de seguridad
+
+Este proyecto no usa seguridad real con JWT ni Spring Security. La autenticación es básica: al hacer login se guarda el usuario en localStorage y cada página verifica el rol antes de cargar. Está pensado así para cumplir con el flujo pedido en el trabajo práctico, no para un entorno de producción.
+
+---
+
+## Video demostrativo
+
+Link del video: pegar acá el enlace
+
+---
+
+## Documentación
+
+Documentación: FoodStore-TPI-Manuel-Da-Corta.pdf
+
+---
+
+## Autor
+
+Manuel Da Corta

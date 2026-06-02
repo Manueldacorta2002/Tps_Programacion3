@@ -1,172 +1,52 @@
 import "./admin.css";
-import { checkAuhtUser, logout } from "../../../utils/auth";
-import { PRODUCTS, getCategories } from "../../../data/data";
+import { requireAuth, logout } from "../../../utils/auth";
+import { api } from "../../../api/api";
 import type { Product } from "../../../types/product";
+import type { Categoria } from "../../../types/categoria";
+import type { PedidoDto } from "../../../types/pedido";
 
-const buttonLogout = document.getElementById(
-  "logoutButton"
-) as HTMLButtonElement;
-buttonLogout?.addEventListener("click", () => {
-  logout();
-});
-
-// Lista simulada (copia local, no afecta el catálogo)
-let localProducts: Product[] = [...PRODUCTS];
-
-const productList = document.getElementById("productList") as HTMLDivElement;
-const btnVer = document.getElementById("btnVerProductos") as HTMLButtonElement;
-const btnAgregar = document.getElementById("btnAgregarProducto") as HTMLButtonElement;
-const formPanel = document.getElementById("formAgregarProducto") as HTMLDivElement;
-
-btnAgregar?.addEventListener("click", () => {
-  const isVisible = formPanel.style.display !== "none";
-  formPanel.style.display = isVisible ? "none" : "block";
-});
-
-const renderProductList = () => {
-  if (localProducts.length === 0) {
-    productList.innerHTML = `<p class="list-empty">No quedan productos en la lista</p>`;
-    return;
-  }
-
-  let html = `
-    <h3 class="list-title">📋 Productos cargados</h3>
-    <table class="products-table">
-      <thead>
-        <tr>
-          <th>Producto</th>
-          <th>Categoría</th>
-          <th>Precio</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
-  localProducts.forEach((p) => {
-    html += `
-      <tr data-id="${p.id}">
-        <td class="product-name">${p.name}</td>
-        <td><span class="category-badge">${p.category.toUpperCase()}</span></td>
-        <td class="product-price">$${p.price.toLocaleString("es-AR")}</td>
-        <td class="product-actions">
-          <button class="btn-edit" data-id="${p.id}">Editar</button>
-          <button class="btn-delete" data-id="${p.id}">Eliminar</button>
-        </td>
-      </tr>
-    `;
-  });
-
-  html += `</tbody></table>`;
-  productList.innerHTML = html;
-
-  // Editar (no funcional, solo feedback)
-  productList.querySelectorAll(".btn-edit").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      alert("Función de edición no disponible (simulado)");
-    });
-  });
-
-  // Eliminar (simulado, solo visual)
-  productList.querySelectorAll(".btn-delete").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = Number((btn as HTMLButtonElement).dataset.id);
-      const product = localProducts.find((p) => p.id === id);
-      if (product && confirm(`¿Seguro que querés eliminar "${product.name}"? Esta acción no se puede deshacer.`)) {
-        localProducts = localProducts.filter((p) => p.id !== id);
-        renderProductList();
-      }
-    });
-  });
-};
-
-btnVer.addEventListener("click", () => {
-  if (productList.style.display === "none") {
-    productList.style.display = "block";
-    btnVer.textContent = "Ocultar productos";
-    renderProductList();
-  } else {
-    productList.style.display = "none";
-    btnVer.textContent = "Ver productos";
-  }
-});
-
-// Renderizar chips de categorías
-const categoryChips = document.getElementById("categoryChips") as HTMLDivElement;
-const categories = getCategories();
-const categoryEmojis: Record<string, string> = {
-  Hamburguesas: "🍔",
-  Pizzas: "🍕",
-  Bebidas: "🥤",
-  Acompañamientos: "🍟",
-  Combos: "🍱",
-};
-
-categories.forEach((cat) => {
-  const chip = document.createElement("span");
-  chip.className = "category-chip";
-  const emoji = categoryEmojis[cat] || "";
-  chip.textContent = `${emoji} ${cat}`;
-  categoryChips.appendChild(chip);
-});
-
-// ====== FORMULARIO AGREGAR PRODUCTO ======
-const nuevoProductoForm = document.getElementById("nuevoProductoForm") as HTMLFormElement;
-const inputNombre = document.getElementById("inputNombre") as HTMLInputElement;
-const inputCategoria = document.getElementById("inputCategoria") as HTMLSelectElement;
-const inputPrecio = document.getElementById("inputPrecio") as HTMLInputElement;
-const btnCancelar = document.getElementById("btnCancelarAgregar") as HTMLButtonElement;
+const logoutBtn = document.getElementById("logoutButton") as HTMLButtonElement;
+const welcomeMsg = document.getElementById("welcomeMsg") as HTMLHeadingElement;
 const statProductos = document.getElementById("statProductos") as HTMLSpanElement;
+const statCategorias = document.getElementById("statCategorias") as HTMLSpanElement;
+const statPedidos = document.getElementById("statPedidos") as HTMLSpanElement;
+const statPendientes = document.getElementById("statPendientes") as HTMLSpanElement;
 const badgeProductos = document.getElementById("badgeProductos") as HTMLSpanElement;
+const badgeCategorias = document.getElementById("badgeCategorias") as HTMLSpanElement;
+const badgePedidos = document.getElementById("badgePedidos") as HTMLSpanElement;
 
-// Poblar el select de categorías
-categories.forEach((cat) => {
-  const opt = document.createElement("option");
-  opt.value = cat;
-  opt.textContent = cat;
-  inputCategoria.appendChild(opt);
-});
+logoutBtn.addEventListener("click", logout);
 
-btnCancelar.addEventListener("click", () => {
-  formPanel.style.display = "none";
-  nuevoProductoForm.reset();
-});
+const init = async () => {
+  const user = requireAuth("ADMIN");
+  if (!user) return;
 
-nuevoProductoForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const nombre = inputNombre.value.trim();
-  const categoria = inputCategoria.value;
-  const precio = Number(inputPrecio.value);
-  if (!nombre || !categoria || precio <= 0) return;
+  welcomeMsg.textContent = `Bienvenido, ${user.nombre}`;
 
-  const nuevoId =
-    localProducts.length > 0
-      ? Math.max(...localProducts.map((p) => p.id)) + 1
-      : 1;
+  try {
+    const [products, categories, orders] = await Promise.all([
+      api.get<Product[]>("/products"),
+      api.get<Categoria[]>("/categories"),
+      api.get<PedidoDto[]>("/orders"),
+    ]);
 
-  localProducts.push({
-    id: nuevoId,
-    name: nombre,
-    category: categoria,
-    price: precio,
-    image: "",
-    description: "",
-  });
+    const pendientes = orders.filter((o) => o.estado === "PENDIENTE").length;
 
-  statProductos.textContent = String(localProducts.length);
-  badgeProductos.textContent = `${localProducts.length} cargados`;
+    statProductos.textContent = String(products.length);
+    statCategorias.textContent = String(categories.length);
+    statPedidos.textContent = String(orders.length);
+    statPendientes.textContent = String(pendientes);
 
-  if (productList.style.display !== "none") renderProductList();
-
-  formPanel.style.display = "none";
-  nuevoProductoForm.reset();
-});
-
-const initPage = () => {
-  checkAuhtUser(
-    "/src/pages/auth/login/login.html",
-    "/src/pages/client/home/home.html",
-    "admin"
-  );
+    badgeProductos.textContent = `${products.length} productos`;
+    badgeCategorias.textContent = `${categories.length} categorías`;
+    badgePedidos.textContent = `${orders.length} pedidos · ${pendientes} pendientes`;
+  } catch {
+    statProductos.textContent = "—";
+    statCategorias.textContent = "—";
+    statPedidos.textContent = "—";
+    statPendientes.textContent = "—";
+  }
 };
-initPage();
+
+init();
+

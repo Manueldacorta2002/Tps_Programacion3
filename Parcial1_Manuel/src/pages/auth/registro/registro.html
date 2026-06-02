@@ -1,15 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍔</text></svg>">
-    <title>Document</title>
+    <link rel="icon" href="/favicon.svg">
+    <title>Food Store - Registro</title>
 </head>
 
 <body>
-    <h1>Hola desde el registro</h1>
+    <div class="login-wrapper">
+        <div class="brand-banner" aria-hidden="true">
+            <span class="brand-banner-logo">FS</span>
+            <span class="brand-banner-text">Food Store</span>
+        </div>
+
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">FS</div>
+                <h1>Crear cuenta</h1>
+                <p>Completá tus datos para registrarte</p>
+            </div>
+
+            <form id="form" novalidate>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" id="nombre" placeholder="Juan" autocomplete="given-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido">Apellido</label>
+                        <input type="text" id="apellido" placeholder="Pérez" autocomplete="family-name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="juan@correo.com" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="celular">Celular</label>
+                    <input type="tel" id="celular" placeholder="1134567890" autocomplete="tel">
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+                </div>
+
+                <div id="errorMsg" class="error-msg" style="display:none;"></div>
+                <div id="successMsg" class="success-msg" style="display:none;"></div>
+
+                <button type="submit" class="btn-login" id="btnRegister">Crear cuenta</button>
+            </form>
+            <p class="login-footer-link">¿Ya tenés cuenta? <a href="../login/login.html">Iniciar sesión</a></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Proyecto Programación 3 — Manuel Da Cortá — 2026</p>
+    </footer>
+
+    <script type="module" src="./registro.ts"></script>
 </body>
 
 </html>

@@ -1,7 +1,6 @@
 package com.utn.dtos.pedido;
 
 import com.utn.dtos.detallePedido.DetallePedidoDto;
-import com.utn.entities.Pedido;
 import com.utn.enums.Estado;
 import com.utn.enums.FormaPago;
 

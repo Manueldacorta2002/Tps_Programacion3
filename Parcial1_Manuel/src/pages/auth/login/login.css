@@ -21,21 +21,6 @@ body {
   overflow-x: hidden;
 }
 
-/* MEJORA: patrón sutil de marca para que el fondo no quede vacío */
-body::before {
-  content: "🍔  Food Store  🍟  Pizza  🍔  Food Store  🍟";
-  position: fixed;
-  inset: 28px auto auto 32px;
-  color: rgba(192, 57, 43, 0.06);
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  pointer-events: none;
-  white-space: nowrap;
-  transform: rotate(-10deg);
-}
-
 /* MEJORA: banda superior para conectar la pantalla con la marca */
 .brand-banner {
   display: inline-flex;
@@ -235,13 +220,6 @@ footer {
 }
 
 @media (max-width: 520px) {
-  body::before {
-    left: 12px;
-    top: 18px;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-  }
-
   .login-wrapper {
     padding: 16px;
   }
@@ -250,3 +228,62 @@ footer {
     padding: 28px 22px;
   }
 }
+
+/* ========== NUEVAS UTILIDADES ========== */
+
+.error-msg {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 0.85rem;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+
+.success-msg {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  color: #16a34a;
+  font-size: 0.85rem;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+
+.login-card .btn-login:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.login-footer-link {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.login-footer-link a {
+  color: #d35400;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-footer-link a:hover {
+  text-decoration: underline;
+}
+
+/* Dos columnas para nombre / apellido en registro */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 400px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+

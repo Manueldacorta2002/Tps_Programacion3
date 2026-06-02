@@ -1,8 +1,15 @@
 import "../store.css";
 import "./improvements.css";
-import { PRODUCTS, getCategories } from "../../../data/data";
+import { api } from "../../../api/api";
 import { addToCart, getCartCount } from "../../../utils/cart";
 import type { Product } from "../../../types/product";
+import type { Categoria } from "../../../types/categoria";
+import { requireAuth, logout } from "../../../utils/auth";
+import pizzaUrl from "../../../assets/products/pizza.svg";
+import burgerUrl from "../../../assets/products/burger.svg";
+import drinkUrl from "../../../assets/products/drink.svg";
+import dessertUrl from "../../../assets/products/dessert.svg";
+import foodDefaultUrl from "../../../assets/products/default-food.svg";
 
 // Elementos del DOM
 const productsGrid = document.getElementById("productsGrid") as HTMLDivElement;
@@ -19,117 +26,87 @@ const heroProductName = document.getElementById("heroProductName") as HTMLHeadin
 const heroProductDescription = document.getElementById("heroProductDescription") as HTMLParagraphElement;
 const heroProductPrice = document.getElementById("heroProductPrice") as HTMLParagraphElement;
 
+let ALL_PRODUCTS: Product[] = [];
 let selectedCategory = localStorage.getItem("store_category") || "";
 
-// Emojis por categoría para usar como placeholder de imagen
-const categoryEmojis: Record<string, string> = {
-  Hamburguesas: "🍔",
-  Pizzas: "🍕",
-  Empanadas: "🥟",
-  Bebidas: "🥤",
-  Acompañamientos: "🍟",
-  Postres: "🍫",
-  Combos: "🍱",
+const getProductImage = (nombre: string, categoriaNombre: string): string => {
+  const n = nombre.toLowerCase();
+  const c = categoriaNombre.toLowerCase();
+  if (c.includes("pizza") || n.includes("pizza")) return pizzaUrl;
+  if (c.includes("hamburguesa") || n.includes("burger") || n.includes("hamburguesa")) return burgerUrl;
+  if (c.includes("bebida") || n.includes("coca") || n.includes("agua") || n.includes("jugo") || n.includes("gaseosa")) return drinkUrl;
+  if (c.includes("postre") || n.includes("tiramisú") || n.includes("tiramisu") || n.includes("brownie") || n.includes("helado")) return dessertUrl;
+  return foodDefaultUrl;
 };
 
-type ProductBadge = {
-  label: string;
-  className: string;
-};
+type ProductBadge = { label: string; className: string };
 
-/* MEJORA: badges promocionales discretos para enriquecer las cards */
 const getProductBadge = (product: Product): ProductBadge => {
-  if (product.category === "Combos") {
-    return { label: "Best Seller", className: "favorite" };
-  }
-
-  if (product.category === "Pizzas") {
-    return { label: "20% Off", className: "discount" };
-  }
-
+  if (product.categoriaNombre === "Combos") return { label: "Más vendido", className: "favorite" };
+  if (product.categoriaNombre === "Pizzas") return { label: "20% Off", className: "discount" };
   return { label: "Recomendado", className: "favorite" };
 };
 
-/* MEJORA: utilitario para aplicar imagen con transición o fallback visual */
-const renderVisual = (
-  container: HTMLDivElement,
-  imageSrc: string,
-  imageAlt: string,
-  fallbackEmoji: string,
-) => {
+const renderVisual = (container: HTMLDivElement, imageSrc: string, imageAlt: string) => {
   container.innerHTML = "";
-
   const img = document.createElement("img");
   img.src = imageSrc;
   img.alt = imageAlt;
   img.loading = "lazy";
-
-  img.addEventListener("load", () => {
-    img.classList.add("is-loaded");
-  });
-
+  img.addEventListener("load", () => img.classList.add("is-loaded"));
   img.addEventListener("error", () => {
-    img.src = "/src/assets/icons/food.svg";
+    img.src = foodDefaultUrl;
     img.onerror = null;
   });
-
   container.appendChild(img);
 };
 
-/* MEJORA: hero dinámico alimentado con el producto más fuerte del menú */
 const renderHeroProduct = () => {
-  const featuredProduct = [...PRODUCTS].sort((current, next) => next.price - current.price)[0];
-  const emoji = categoryEmojis[featuredProduct.category] || "🍽️";
-  const badge = getProductBadge(featuredProduct);
-
+  if (ALL_PRODUCTS.length === 0) return;
+  const featured = [...ALL_PRODUCTS].sort((a, b) => b.precio - a.precio)[0];
+  const badge = getProductBadge(featured);
   heroBadge.textContent = badge.label;
-  heroProductCategory.textContent = featuredProduct.category;
-  heroProductName.textContent = featuredProduct.name;
-  heroProductDescription.textContent = featuredProduct.description;
-  heroProductPrice.textContent = `$${featuredProduct.price.toLocaleString("es-AR")}`;
-  renderVisual(heroProductVisual, featuredProduct.image, featuredProduct.name, emoji);
+  heroProductCategory.textContent = featured.categoriaNombre;
+  heroProductName.textContent = featured.nombre;
+  heroProductDescription.textContent = featured.descripcion;
+  heroProductPrice.textContent = `$${featured.precio.toLocaleString("es-AR")}`;
+  renderVisual(heroProductVisual, getProductImage(featured.nombre, featured.categoriaNombre), featured.nombre);
 };
 
-// Renderizar un producto en una card
 const createProductCard = (product: Product): HTMLDivElement => {
   const card = document.createElement("div");
   card.className = "product-card";
-
-  const emoji = categoryEmojis[product.category] || "🍽️";
   const badge = getProductBadge(product);
-
   card.innerHTML = `
     <span class="product-badge ${badge.className}">${badge.label}</span>
-    <div class="product-img">
-    </div>
+    <div class="product-img"></div>
     <div class="product-info">
-      <span class="category-tag">${product.category}</span>
-      <h3>${product.name}</h3>
-      <p class="description">${product.description}</p>
+      <span class="category-tag">${product.categoriaNombre}</span>
+      <h3>${product.nombre}</h3>
+      <p class="description">${product.descripcion}</p>
       <div class="product-meta">
-        <p class="price">$${product.price.toLocaleString("es-AR")}</p>
+        <p class="price">$${product.precio.toLocaleString("es-AR")}</p>
         <button class="btn-add" data-id="${product.id}">
-          <span class="btn-add-text">Sumar</span>
-          <span class="btn-add-icon">🛒</span>
+          <span class="btn-add-text">Agregar</span>
         </button>
       </div>
     </div>
   `;
-
   const imgContainer = card.querySelector(".product-img") as HTMLDivElement;
-  renderVisual(imgContainer, product.image, product.name, emoji);
+  renderVisual(imgContainer, getProductImage(product.nombre, product.categoriaNombre), product.nombre);
 
   const btn = card.querySelector(".btn-add") as HTMLButtonElement;
   const btnText = btn.querySelector(".btn-add-text") as HTMLSpanElement;
   btn.addEventListener("click", () => {
-    addToCart({ id: product.id, name: product.name, price: product.price });
+    addToCart({ id: product.id, name: product.nombre, price: product.precio, stock: product.stock, imagen: product.imagen });
     updateCartCount();
-    showToast(product.name);
-
+    showToast(product.nombre);
     btnText.textContent = "Agregado";
+    btn.classList.add("btn-added");
     btn.disabled = true;
     setTimeout(() => {
-      btnText.textContent = "Sumar";
+      btnText.textContent = "Agregar";
+      btn.classList.remove("btn-added");
       btn.disabled = false;
     }, 1000);
   });
@@ -137,36 +114,27 @@ const createProductCard = (product: Product): HTMLDivElement => {
   return card;
 };
 
-// Filtrar y renderizar productos
 const renderProducts = () => {
   const searchTerm = searchInput.value.toLowerCase().trim();
-
-  const filtered = PRODUCTS.filter((p) => {
-    const matchName = p.name.toLowerCase().includes(searchTerm);
-    const matchCategory = selectedCategory === "" || p.category === selectedCategory;
-    return matchName && matchCategory;
+  const filtered = ALL_PRODUCTS.filter((p) => {
+    const matchName = p.nombre.toLowerCase().includes(searchTerm);
+    const matchCategory = selectedCategory === "" || p.categoriaNombre === selectedCategory;
+    return matchName && matchCategory && p.disponible;
   });
-
   productsGrid.innerHTML = "";
-
   if (filtered.length === 0) {
     noResults.style.display = "block";
   } else {
     noResults.style.display = "none";
-    filtered.forEach((product) => {
-      productsGrid.appendChild(createProductCard(product));
-    });
+    filtered.forEach((product) => productsGrid.appendChild(createProductCard(product)));
   }
 };
 
-// Renderizar botones de categoría
-const renderCategoryFilters = () => {
-  const categories = getCategories();
-
-  // Botón "Todas"
+const renderCategoryFilters = (categories: Categoria[]) => {
+  categoryFilters.innerHTML = "";
   const allBtn = document.createElement("button");
-  allBtn.textContent = "🍽️ Todas";
-  allBtn.className = "active";
+  allBtn.textContent = "Todas";
+  allBtn.className = selectedCategory === "" ? "active" : "";
   allBtn.addEventListener("click", () => {
     selectedCategory = "";
     localStorage.setItem("store_category", "");
@@ -177,11 +145,11 @@ const renderCategoryFilters = () => {
 
   categories.forEach((cat) => {
     const btn = document.createElement("button");
-    const emoji = categoryEmojis[cat] || "";
-    btn.textContent = `${emoji} ${cat}`;
+    btn.textContent = cat.nombre;
+    btn.className = selectedCategory === cat.nombre ? "active" : "";
     btn.addEventListener("click", () => {
-      selectedCategory = cat;
-      localStorage.setItem("store_category", cat);
+      selectedCategory = cat.nombre;
+      localStorage.setItem("store_category", cat.nombre);
       updateActiveCategory();
       renderProducts();
     });
@@ -189,53 +157,55 @@ const renderCategoryFilters = () => {
   });
 };
 
-// Actualizar botón activo de categoría
 const updateActiveCategory = () => {
-  const buttons = categoryFilters.querySelectorAll("button");
-  buttons.forEach((btn) => {
-    if (selectedCategory === "" && btn.textContent === "🍽️ Todas") {
-      btn.classList.add("active");
-    } else if (btn.textContent?.includes(selectedCategory) && selectedCategory !== "") {
-      btn.classList.add("active");
-    } else {
-      btn.classList.remove("active");
-    }
+  categoryFilters.querySelectorAll("button").forEach((btn) => {
+    const isAll = selectedCategory === "" && btn.textContent === "Todas";
+    const matches = selectedCategory !== "" && btn.textContent?.includes(selectedCategory);
+    btn.className = isAll || matches ? "active" : "";
   });
 };
 
-// Actualizar contador del carrito
 const updateCartCount = () => {
   cartCount.textContent = String(getCartCount());
 };
 
-// Mostrar notificación toast
 const showToast = (name: string) => {
-  toast.innerHTML = `${name} agregado al carrito \u{1F6D2} <a href="../cart/cart.html" class="toast-action">Ver carrito</a>`;
+  toast.innerHTML = `${name} agregado al carrito — <a href="../cart/cart.html" class="toast-action">Ver carrito</a>`;
   toast.classList.add("show");
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2000);
+  setTimeout(() => toast.classList.remove("show"), 2000);
 };
 
-// Evento de búsqueda en vivo
 searchInput.addEventListener("input", () => {
   localStorage.setItem("store_search", searchInput.value);
   renderProducts();
 });
 
-// Salir: va al login
-logoutBtn.addEventListener("click", () => {
-  window.location.href = "/src/pages/auth/login/login.html";
-});
+logoutBtn.addEventListener("click", logout);
 
-// Inicializar página
-const init = () => {
+const init = async () => {
+  const user = requireAuth("USUARIO");
+  if (!user) return;
+
   searchInput.value = localStorage.getItem("store_search") || "";
-  renderHeroProduct();
-  renderCategoryFilters();
-  updateActiveCategory();
-  renderProducts();
   updateCartCount();
+
+  // Mostrar un indicador de carga en la grilla
+  productsGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#aaa;padding:40px 0;">Cargando productos…</p>`;
+
+  try {
+    const [products, categories] = await Promise.all([
+      api.get<Product[]>("/products"),
+      api.get<Categoria[]>("/categories"),
+    ]);
+    ALL_PRODUCTS = products;
+    renderHeroProduct();
+    renderCategoryFilters(categories);
+    updateActiveCategory();
+    renderProducts();
+  } catch (err) {
+    productsGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#c0392b;padding:40px 0;">No se pudieron cargar los productos. Verificá que el servidor esté corriendo.</p>`;
+  }
 };
 
 init();
+

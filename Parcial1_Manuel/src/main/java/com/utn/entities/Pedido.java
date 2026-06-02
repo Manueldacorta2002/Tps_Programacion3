@@ -21,14 +21,18 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Pedido extends Base implements Calculable {
 
+    @Column(nullable = false)
     private LocalDate fecha;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Estado estado;
 
+    @Column(nullable = false)
     private Double total;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private FormaPago formaPago;
 
     @ManyToOne(fetch = FetchType.LAZY)

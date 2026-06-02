@@ -18,7 +18,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Categoria extends Base {
 
+    @Column(nullable = false, unique = true)
     private String nombre;
+
     private String descripcion;
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)

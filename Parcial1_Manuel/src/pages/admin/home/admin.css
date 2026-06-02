@@ -450,6 +450,11 @@ main {
   background: #7a1515;
 }
 
+.admin-btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 .admin-btn-ghost {
   background: transparent;
   color: #8b1a1a;
@@ -556,6 +561,215 @@ main {
 .products-table .btn-delete:hover {
   background: #fff0f0;
   transform: none;
+}
+
+/* ========== TOOLBAR ========== */
+.admin-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #2c2c2c;
+}
+
+/* ========== CARD COMO ENLACE ========== */
+.admin-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.admin-card-link:hover {
+  color: inherit;
+}
+
+/* ========== ANCHOR USANDO admin-btn-ghost EN NAV ========== */
+a.admin-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  width: auto;
+}
+
+/* ========== BADGES DISPONIBILIDAD ========== */
+.disponible-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 12px;
+}
+
+.badge-activo {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge-inactivo {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ========== BADGES DE ESTADO (tablas admin) ========== */
+.order-estado {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 12px;
+}
+
+.estado-pendiente  { background: #fef9c3; color: #854d0e; }
+.estado-confirmado { background: #dcfce7; color: #166534; }
+.estado-terminado  { background: #e0f2fe; color: #0369a1; }
+.estado-cancelado  { background: #fee2e2; color: #991b1b; }
+
+/* ========== FORM ROW DOS COLUMNAS ========== */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* ========== FORM FIELD CHECKBOX ========== */
+.form-field-check {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.form-field-check label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #555;
+  text-transform: none;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.form-field-check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--admin-brand-dark);
+  flex-shrink: 0;
+}
+
+/* ========== MENSAJES ERROR / ÉXITO ========== */
+.error-msg {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 0.85rem;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+
+.success-msg {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  color: #16a34a;
+  font-size: 0.85rem;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+
+/* ========== SELECT ESTADO EN TABLA ========== */
+.select-estado {
+  font-size: 0.82rem;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+}
+
+/* ========== FILTER GROUP ========== */
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: #666;
+}
+
+.filter-group select {
+  font-size: 0.88rem;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1.5px solid #e0d6cf;
+  background: white;
+  color: #333;
+  cursor: pointer;
+}
+
+/* ========== TABLA OVERFLOW RESPONSIVE ========== */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.products-table {
+  min-width: 600px;
+}
+
+/* ========== RESPONSIVE ADMIN ========== */
+@media (max-width: 768px) {
+  header {
+    padding: 12px 16px;
+  }
+
+  header h1 {
+    font-size: 1.1rem;
+  }
+
+  header .subtitle {
+    display: none;
+  }
+
+  main {
+    padding: 20px 14px;
+  }
+
+  .admin-stats {
+    gap: 10px;
+  }
+
+  .stat-item {
+    min-width: 110px;
+    padding: 12px 14px;
+  }
+
+  .admin-sections {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .products-table {
+    display: block;
+    overflow-x: auto;
+  }
 }
 
 /* ========== FOOTER ========== */

@@ -3,6 +3,8 @@ export interface CartItem {
   name: string;
   price: number;
   quantity: number;
+  stock?: number;
+  imagen?: string;
 }
 
 const CART_KEY = "cart";
@@ -10,7 +12,11 @@ const CART_KEY = "cart";
 export const getCart = (): CartItem[] => {
   const data = localStorage.getItem(CART_KEY);
   if (!data) return [];
-  return JSON.parse(data) as CartItem[];
+  try {
+    return JSON.parse(data) as CartItem[];
+  } catch {
+    return [];
+  }
 };
 
 export const saveCart = (cart: CartItem[]): void => {
@@ -21,18 +27,25 @@ export const addToCart = (product: {
   id: number;
   name: string;
   price: number;
+  stock?: number;
+  imagen?: string;
 }): void => {
   const cart = getCart();
   const existing = cart.find((item) => item.id === product.id);
+  const maxStock = product.stock ?? Infinity;
 
   if (existing) {
-    existing.quantity += 1;
+    if (existing.quantity < maxStock) {
+      existing.quantity += 1;
+    }
   } else {
     cart.push({
       id: product.id,
       name: product.name,
       price: product.price,
       quantity: 1,
+      stock: product.stock,
+      imagen: product.imagen,
     });
   }
 
@@ -40,20 +53,19 @@ export const addToCart = (product: {
 };
 
 export const removeFromCart = (productId: number): void => {
-  const cart = getCart().filter((item) => item.id !== productId);
-  saveCart(cart);
+  saveCart(getCart().filter((item) => item.id !== productId));
 };
 
 export const updateQuantity = (productId: number, quantity: number): void => {
   const cart = getCart();
   const item = cart.find((i) => i.id === productId);
-  if (item) {
-    item.quantity = quantity;
-    if (item.quantity <= 0) {
-      saveCart(cart.filter((i) => i.id !== productId));
-    } else {
-      saveCart(cart);
-    }
+  if (!item) return;
+  if (quantity <= 0) {
+    saveCart(cart.filter((i) => i.id !== productId));
+  } else {
+    const max = item.stock ?? Infinity;
+    item.quantity = Math.min(quantity, max);
+    saveCart(cart);
   }
 };
 
@@ -62,6 +74,6 @@ export const clearCart = (): void => {
 };
 
 export const getCartCount = (): number => {
-  const cart = getCart();
-  return cart.reduce((total, item) => total + item.quantity, 0);
+  return getCart().reduce((total, item) => total + item.quantity, 0);
 };
+

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/favicon.svg">
+  <title>Food Store - Categorías</title>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      <h1>Categorías</h1>
+      <span class="subtitle">Panel de administración</span>
+    </div>
+    <nav>
+      <a href="../home/home.html" class="admin-btn-ghost">← Volver</a>
+      <button id="logoutButton">Salir</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="admin-toolbar">
+      <h2 class="section-title">Gestión de Categorías</h2>
+      <button class="admin-btn-primary" id="btnNuevaCategoria">+ Nueva categoría</button>
+    </div>
+
+    <!-- Formulario alta/edición -->
+    <div id="formPanel" class="add-product-form" style="display:none;">
+      <h4 class="form-title" id="formTitle">Nueva categoría</h4>
+      <form id="categoriaForm" novalidate>
+        <input type="hidden" id="inputId">
+        <div class="form-field">
+          <label for="inputNombre">Nombre</label>
+          <input type="text" id="inputNombre" placeholder="Ej: Pizzas" required>
+        </div>
+        <div class="form-field">
+          <label for="inputDescripcion">Descripción</label>
+          <input type="text" id="inputDescripcion" placeholder="Ej: Pizzas artesanales" required>
+        </div>
+        <p id="formError" class="error-msg" style="display:none;"></p>
+        <div class="form-actions">
+          <button type="submit" class="admin-btn-primary" id="btnSubmit">Guardar</button>
+          <button type="button" class="admin-btn-ghost" id="btnCancelar">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="tableContainer"></div>
+  </main>
+
+  <footer>
+    <p>Proyecto Programación 3 — Manuel Da Cortá — 2026</p>
+  </footer>
+
+  <script type="module" src="./categories.ts"></script>
+</body>
+
+</html>
