@@ -48,10 +48,19 @@ sourceSets {
 }
 
 application {
-    mainClass = 'com.utn.Main'
+    mainClass = 'com.utn.SpringTpApplication'
 }
 
 run {
+    jvmArgs = ['-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8']
+    standardInput = System.in
+}
+
+tasks.register('runConsole', JavaExec) {
+    group = 'application'
+    description = 'Ejecuta el parcial de consola JPA'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.utn.Main'
     jvmArgs = ['-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8']
     standardInput = System.in
 }

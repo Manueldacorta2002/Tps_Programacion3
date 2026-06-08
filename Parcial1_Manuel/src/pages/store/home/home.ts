@@ -43,7 +43,7 @@ type ProductBadge = { label: string; className: string };
 
 const getProductBadge = (product: Product): ProductBadge => {
   if (product.categoriaNombre === "Combos") return { label: "Más vendido", className: "favorite" };
-  if (product.categoriaNombre === "Pizzas") return { label: "20% Off", className: "discount" };
+  if (product.categoriaNombre === "Pizzas") return { label: "20% OFF", className: "discount" };
   return { label: "Recomendado", className: "favorite" };
 };
 

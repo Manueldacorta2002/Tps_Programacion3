@@ -37,9 +37,15 @@
 }
 
 .modal-icon {
-  font-size: 3rem;
-  margin-bottom: 12px;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fde8d8, #fef3ec);
+  color: #d35400;
+  margin: 0 auto 16px;
 }
 
 .modal-title {
@@ -106,17 +112,60 @@
   flex-wrap: wrap;
 }
 
-.modal-btn-menu {
+.modal-btn-confirm {
   flex: 1;
   min-width: 130px;
   text-align: center;
   text-decoration: none;
+  background: linear-gradient(135deg, #d35400, #c0392b) !important;
+  box-shadow: 0 6px 18px rgba(211, 84, 0, 0.28);
 }
 
 .modal-btn-close {
   flex: 1;
   min-width: 130px;
   cursor: pointer;
+}
+
+/* ========== MODAL PAGO ========== */
+.modal-pago-group {
+  margin-top: 16px;
+  text-align: left;
+}
+
+.modal-pago-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 7px;
+}
+
+#confirmModal select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #e0d6cf;
+  border-radius: 9px;
+  font-size: 0.93rem;
+  font-family: inherit;
+  background: #fdfcfb;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+#confirmModal select:focus {
+  outline: none;
+  border-color: #d35400;
+  box-shadow: 0 0 0 3px rgba(211, 84, 0, 0.1);
 }
 
 /* ========== RESET Y BASE ========== */

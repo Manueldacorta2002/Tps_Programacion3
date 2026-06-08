@@ -1,4 +1,4 @@
-/* MEJORA: variables visuales para reforzar la paleta cálida existente */
+/* variables visuales para reforzar la paleta cálida existente */
 :root {
   --store-accent: #c0392b;
   --store-accent-deep: #96281b;
@@ -11,12 +11,12 @@
   --store-shadow: 0 18px 45px rgba(122, 69, 36, 0.12);
 }
 
-/* MEJORA: desplazamiento suave entre hero y menú */
+/* desplazamiento suave entre hero y menú */
 html {
   scroll-behavior: smooth;
 }
 
-/* MEJORA: respiración general y fondo con capas sutiles */
+/* respiración general y fondo con capas sutiles */
 body {
   background:
     radial-gradient(circle at top right, rgba(211, 84, 0, 0.08), transparent 28%),
@@ -24,7 +24,7 @@ body {
     #faf7f5;
 }
 
-/* MEJORA: header más liviano y consistente con la nueva jerarquía */
+/* header más liviano y consistente con la nueva jerarquía */
 header {
   backdrop-filter: blur(14px);
   background: linear-gradient(135deg, #d35400 0%, #c0392b 100%);
@@ -32,7 +32,7 @@ header {
   border-bottom: 1px solid rgba(255, 248, 241, 0.45);
 }
 
-/* MEJORA: separación visual persistente entre navbar y hero */
+/* separación visual persistente entre navbar y hero */
 header::after {
   content: "";
   position: absolute;
@@ -44,14 +44,14 @@ header::after {
   pointer-events: none;
 }
 
-/* MEJORA: ancho y espaciado del contenido principal */
+/* ancho y espaciado del contenido principal */
 main {
   max-width: 1180px;
   padding-top: 40px;
   padding-bottom: 56px;
 }
 
-/* MEJORA: hero en dos columnas con foco en producto destacado */
+/* hero en dos columnas con foco en producto destacado */
 .hero-section {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
@@ -272,7 +272,7 @@ main {
   font-weight: 800;
 }
 
-/* MEJORA: promos en dos columnas con contraste sutil */
+/* promos en dos columnas con contraste sutil */
 .promo-banners {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -341,7 +341,7 @@ main {
   line-height: 1.6;
 }
 
-/* MEJORA: filtros más integrados al nuevo ritmo visual */
+/* filtros más integrados al nuevo ritmo visual */
 .filters {
   padding: 22px;
   border-radius: 22px;
@@ -380,7 +380,7 @@ main {
   box-shadow: 0 12px 20px rgba(192, 57, 43, 0.18);
 }
 
-/* MEJORA: encabezado de sección con mejor jerarquía */
+/* encabezado de sección con mejor jerarquía */
 .products-section {
   margin-top: 8px;
 }
@@ -404,13 +404,13 @@ main {
   line-height: 1.6;
 }
 
-/* MEJORA: grilla fija a 4 columnas desktop y 2 mobile */
+/* grilla fija a 4 columnas desktop y 2 mobile */
 .products-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
 }
 
-/* MEJORA: card refinada con badge, media cuadrada y CTA unificado */
+/* card refinada con badge, media cuadrada y CTA unificado */
 .product-card {
   position: relative;
   overflow: hidden;
@@ -558,7 +558,7 @@ header nav button:focus-visible {
   outline-offset: 3px;
 }
 
-/* MEJORA: bloque inferior con imagen simbólica y métricas */
+/* bloque inferior con imagen simbólica y métricas */
 .community-section {
   display: grid;
   grid-template-columns: minmax(260px, 0.95fr) minmax(0, 1.05fr);
@@ -626,14 +626,14 @@ header nav button:focus-visible {
   line-height: 1.5;
 }
 
-/* MEJORA: footer más aireado y limpio */
+/* footer más aireado y limpio */
 footer {
   padding: 28px 24px 42px;
   text-align: center;
   color: var(--store-muted);
 }
 
-/* MEJORA: ajustes responsivos para mantener 2 columnas en mobile */
+/* ajustes responsivos para mantener 2 columnas en mobile */
 @media (max-width: 1080px) {
   .hero-section,
   .community-section,
