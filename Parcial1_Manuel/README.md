@@ -12,18 +12,18 @@ El backend es una API REST hecha con Spring Boot y el frontend es un conjunto de
 
 **Backend:**
 
-- Java 17
-- Spring Boot
-- Spring Data JPA
-- H2 Database (base de datos en memoria)
-- Gradle
+* Java 17
+* Spring Boot
+* Spring Data JPA
+* H2 Database
+* Gradle
 
 **Frontend:**
 
-- TypeScript
-- Vite
-- HTML
-- CSS
+* TypeScript
+* Vite
+* HTML
+* CSS
 
 ---
 
@@ -31,18 +31,18 @@ El backend es una API REST hecha con Spring Boot y el frontend es un conjunto de
 
 **Cliente:**
 
-- Registro e inicio de sesión
-- Catálogo de productos con búsqueda y filtro por categoría
-- Carrito de compras (guardado en localStorage)
-- Confirmación de pedido con selección de forma de pago
-- Historial de pedidos propios
+* Registro e inicio de sesión
+* Catálogo de productos con búsqueda y filtro por categoría
+* Carrito de compras guardado en localStorage
+* Confirmación de pedido con selección de forma de pago
+* Historial de pedidos propios
 
 **Administrador:**
 
-- Dashboard con estadísticas generales
-- Gestión de categorías (crear, editar, eliminar)
-- Gestión de productos (crear, editar, eliminar)
-- Gestión de pedidos con cambio de estado
+* Dashboard con estadísticas generales
+* Gestión de categorías: crear, editar y eliminar
+* Gestión de productos: crear, editar y eliminar
+* Gestión de pedidos con cambio de estado
 
 ---
 
@@ -52,13 +52,13 @@ El proyecto carga datos automáticamente al iniciar. Se pueden usar estas cuenta
 
 **Administrador:**
 
-- Email: <admin@admin.com>
-- Contraseña: 123456
+* Email: [admin@admin.com](mailto:admin@admin.com)
+* Contraseña: 123456
 
 **Cliente:**
 
-- Email: <cliente@foodstore.com>
-- Contraseña: 123456
+* Email: [cliente@foodstore.com](mailto:cliente@foodstore.com)
+* Contraseña: 123456
 
 ---
 
@@ -66,38 +66,41 @@ El proyecto carga datos automáticamente al iniciar. Se pueden usar estas cuenta
 
 ### Backend
 
-Desde la carpeta raíz del proyecto (donde está `gradlew.bat`):
+Desde la carpeta raíz del proyecto, donde está el archivo `gradlew.bat`, ejecutar:
 
 ```bash
 .\gradlew.bat bootRun
 ```
 
-El servidor queda corriendo en <http://localhost:8080>
+El servidor queda corriendo en:
+
+```text
+http://localhost:8080
+```
 
 ### Frontend
+
+En otra terminal, desde la misma carpeta del proyecto, ejecutar:
 
 ```bash
 npm install
 npm run dev
 ```
 
-O si usás pnpm:
+El frontend queda corriendo en:
 
-```bash
-pnpm install
-pnpm dev
+```text
+http://localhost:5173
 ```
-
-El frontend queda en <http://localhost:5173>
 
 ---
 
 ## URLs importantes
 
-- Frontend: <http://localhost:5173>
-- Backend: <http://localhost:8080>
-- Consola H2: <http://localhost:8080/h2-console>
-- Swagger UI: <http://localhost:8080/swagger-ui/index.html>
+* Frontend: http://localhost:5173
+* Backend: http://localhost:8080
+* Consola H2: http://localhost:8080/h2-console
+* Swagger UI: http://localhost:8080/swagger-ui/index.html
 
 ---
 
@@ -105,7 +108,7 @@ El frontend queda en <http://localhost:5173>
 
 El backend está organizado por capas: `controllers`, `services`, `repositories`, `entities`, `dtos`, `enums`, `exceptions` y `config`.
 
-El frontend está separado en carpetas por tipo: `pages` (una carpeta por pantalla), `types` (interfaces TypeScript), `utils` (funciones de auth, carrito y navegación) y `api` (cliente HTTP centralizado).
+El frontend está separado en carpetas por tipo: `pages` para las pantallas, `types` para interfaces TypeScript, `utils` para funciones de autenticación, carrito y navegación, y `api` para el cliente HTTP centralizado.
 
 ```text
 src/
@@ -121,19 +124,19 @@ src/
 ├── utils/                   <- auth, cart, localStorage
 └── pages/
     ├── auth/                <- login, registro
-    ├── store/               <- catalogo, carrito, pedidos (cliente)
-    └── admin/               <- dashboard, categorias, productos, pedidos
+    ├── store/               <- catálogo, carrito, pedidos del cliente
+    └── admin/               <- dashboard, categorías, productos, pedidos
 ```
 
 ---
 
 ## Decisiones técnicas
 
-- Usé **localStorage** para guardar la sesión y el carrito porque es un proyecto educativo y no requería autenticación real con tokens.
-- Usé **DTOs** en el backend para no exponer información sensible como las contraseñas en las respuestas de la API.
-- Implementé **soft delete**: los registros no se borran físicamente, sino que se marcan con `eliminado = true` y se filtran en las consultas.
-- Separé el backend en capas (controller, service, repository) para que el código quede más ordenado y sea más fácil de mantener.
-- Usé **H2** como base de datos en memoria para que el proyecto se pueda correr sin configurar nada extra.
+* Usé `localStorage` para guardar la sesión y el carrito porque es un proyecto educativo y no requería autenticación real con tokens.
+* Usé DTOs en el backend para no exponer información sensible como las contraseñas en las respuestas de la API.
+* Implementé soft delete: los registros no se borran físicamente, sino que se marcan con `eliminado = true` y se filtran en las consultas.
+* Separé el backend en capas: controller, service y repository, para que el código quede más ordenado.
+* Usé H2 como base de datos para que el proyecto se pueda correr sin configurar una base externa.
 
 ---
 
@@ -145,7 +148,7 @@ Este proyecto no usa seguridad real con JWT ni Spring Security. La autenticació
 
 ## Video demostrativo
 
-Link del video: pegar acá el enlace
+Link del video: https://drive.google.com/file/d/1BHU0qvSS2kuNGBqXZYQ1oy9dNXYmzQNZ/view?usp=sharing
 
 ---
 
