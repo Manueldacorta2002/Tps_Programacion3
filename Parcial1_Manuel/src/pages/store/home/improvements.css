@@ -782,3 +782,136 @@ footer {
     display: none;
   }
 }
+
+/* ─── Fine-tuning ─── */
+
+.hero-product-card {
+  box-shadow: 0 22px 52px rgba(122, 69, 36, 0.15);
+}
+
+.hero-cta {
+  background: linear-gradient(135deg, #c0392b 0%, #d35400 100%);
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: 0 14px 30px rgba(192, 57, 43, 0.24);
+}
+
+.product-card {
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(122, 69, 36, 0.07), 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.product-card:hover {
+  box-shadow: 0 20px 40px rgba(122, 69, 36, 0.16);
+}
+
+.product-card .product-img {
+  height: 148px;
+  border-radius: 20px;
+}
+
+.section-title {
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  letter-spacing: -0.5px;
+  font-weight: 800;
+}
+
+.hero-title {
+  font-weight: 900;
+}
+
+.filters {
+  padding: 22px 24px;
+}
+
+.section-kicker {
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+}
+
+/* ═══ REDESIGN V2 — HOME ═══ */
+
+/* Header blanco: sobreescribe el gradiente naranja de arriba */
+header {
+  background: white;
+  backdrop-filter: none;
+  box-shadow: 0 1px 10px rgba(0,0,0,0.07);
+  border-bottom: 1px solid #ede5db;
+  color: #1a1008;
+}
+
+header::after {
+  display: none;
+}
+
+header .brand h1 {
+  color: #1a1008;
+  font-size: 1.2rem;
+  letter-spacing: -0.4px;
+}
+
+header .subtitle {
+  color: #8c7c72;
+  opacity: 1;
+  font-size: 0.7rem;
+}
+
+header nav a:not(.btn-back) {
+  color: #1a1008;
+  background: #fff8f1;
+  border: 1px solid #ede5db;
+  font-size: 0.82rem;
+}
+
+header nav a:not(.btn-back):hover {
+  background: rgba(211,84,0,0.07);
+  border-color: rgba(211,84,0,0.22);
+  color: #d35400;
+  transform: none;
+  box-shadow: none;
+}
+
+header nav button {
+  background: transparent;
+  border: 1px solid #ede5db;
+  color: #8c7c72;
+  font-size: 0.82rem;
+}
+
+header nav button:hover {
+  background: #f5f0ec;
+  box-shadow: none;
+  transform: none;
+  color: #555;
+}
+
+/* Icono dentro del input de búsqueda */
+.search-input-wrap {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #b0a098;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.filters input[type="text"] {
+  padding-left: 46px;
+  margin-bottom: 0;
+}
+
+/* Community portrait con ícono visible */
+.community-portrait {
+  color: #c0392b;
+  opacity: 0.8;
+}
+
+.community-portrait svg {
+  display: block;
+}

@@ -246,3 +246,101 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+/* ─── Visual polish ─── */
+
+@keyframes loginEntrance {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+.login-wrapper {
+  animation: loginEntrance 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.brand-banner {
+  animation: loginEntrance 0.4s 0.05s cubic-bezier(0.22, 1, 0.36, 1) both;
+  background: linear-gradient(135deg, #e67e22 0%, #d35400 50%, #c0392b 100%);
+  box-shadow: 0 8px 24px rgba(150, 40, 27, 0.24), 0 2px 6px rgba(0, 0, 0, 0.06);
+  min-height: 46px;
+  gap: 12px;
+}
+
+.login-card {
+  border-radius: 22px;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.03),
+    0 10px 32px rgba(122, 69, 36, 0.11),
+    0 26px 64px rgba(122, 69, 36, 0.07);
+  border: 1px solid rgba(236, 230, 224, 0.8);
+  background: rgba(255, 255, 255, 0.97);
+}
+
+.login-card .login-header .logo {
+  background: linear-gradient(145deg, #e67e22 0%, #d35400 42%, #c0392b 100%);
+  box-shadow: 0 8px 22px rgba(211, 84, 0, 0.32);
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  font-size: 1.45rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+}
+
+.login-card .login-header h1 {
+  font-size: 1.42rem;
+  letter-spacing: -0.5px;
+  font-weight: 800;
+}
+
+.login-card .form-group input {
+  border-radius: 11px;
+  border-color: #e8ddd6;
+  padding: 12px 16px;
+}
+
+.login-card .form-group input:focus {
+  box-shadow: 0 0 0 4px rgba(211, 84, 0, 0.09);
+}
+
+.login-card .btn-login {
+  background: linear-gradient(135deg, #e67e22 0%, #d35400 45%, #c0392b 100%);
+  border-radius: 11px;
+  font-size: 1rem;
+  padding: 13px;
+  font-weight: 700;
+  box-shadow: 0 6px 20px rgba(211, 84, 0, 0.3);
+}
+
+.login-card .btn-login:hover {
+  opacity: 0.94;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(211, 84, 0, 0.38);
+}
+
+/* ─── Auditoría visual: accesibilidad y pulido seguro ─── */
+
+/* Respeta a quien prefiere menos movimiento: desactiva animaciones sin alterar el layout */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Selección de texto con tinte de marca */
+::selection {
+  background: rgba(211, 84, 0, 0.18);
+  color: #7a1515;
+}
+
+/* Foco visible por teclado (no afecta la interacción con mouse) */
+.btn-login:focus-visible,
+.login-card .form-group input:focus-visible,
+.login-footer-link a:focus-visible {
+  outline: 3px solid rgba(211, 84, 0, 0.4);
+  outline-offset: 2px;
+}

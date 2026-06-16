@@ -1,15 +1,24 @@
 package com.utn.config;
 
 import com.utn.entities.Categoria;
+import com.utn.entities.Pedido;
 import com.utn.entities.Producto;
 import com.utn.entities.Usuario;
+import com.utn.enums.Estado;
+import com.utn.enums.FormaPago;
 import com.utn.enums.Rol;
 import com.utn.repositories.CategoriaRepository;
+import com.utn.repositories.PedidoRepository;
 import com.utn.repositories.ProductoRepository;
 import com.utn.repositories.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -17,13 +26,16 @@ public class DataInitializer implements CommandLineRunner {
     private final UsuarioRepository usuarioRepository;
     private final CategoriaRepository categoriaRepository;
     private final ProductoRepository productoRepository;
+    private final PedidoRepository pedidoRepository;
 
     public DataInitializer(UsuarioRepository usuarioRepository,
                            CategoriaRepository categoriaRepository,
-                           ProductoRepository productoRepository) {
+                           ProductoRepository productoRepository,
+                           PedidoRepository pedidoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.categoriaRepository = categoriaRepository;
         this.productoRepository = productoRepository;
+        this.pedidoRepository = pedidoRepository;
     }
 
     @Override
@@ -31,6 +43,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         crearUsuarios();
         crearCategorias();
+        crearPedidos();
     }
 
     private void crearUsuarios() {
@@ -196,5 +209,65 @@ public class DataInitializer implements CommandLineRunner {
                 .categoria(postres)
                 .build());
     }
-}
 
+    private void crearPedidos() {
+        if (!pedidoRepository.findAllByEliminadoFalse().isEmpty()) {
+            return; // Ya hay pedidos, no duplicar
+        }
+
+        Usuario cliente = usuarioRepository.findByMailAndEliminadoFalse("cliente@foodstore.com").orElse(null);
+        if (cliente == null) return;
+
+        List<Producto> productos = productoRepository.findAllByEliminadoFalse();
+        Map<String, Producto> mapaProductos = productos.stream()
+                .collect(Collectors.toMap(Producto::getNombre, p -> p));
+
+        // Pedido 1: terminado, efectivo — Pizza Mozzarella x2 ($2400) + Coca-Cola x1 ($350) = $2750
+        Producto pizzaMozzarella = mapaProductos.get("Pizza Mozzarella");
+        Producto cocaCola = mapaProductos.get("Coca-Cola 500ml");
+        if (pizzaMozzarella != null && cocaCola != null) {
+            Pedido pedido1 = Pedido.builder()
+                    .fecha(LocalDate.now().minusDays(3))
+                    .estado(Estado.TERMINADO)
+                    .total(0.0)
+                    .formaPago(FormaPago.EFECTIVO)
+                    .usuario(cliente)
+                    .build();
+            pedido1.addDetallePedido(2, pizzaMozzarella);
+            pedido1.addDetallePedido(1, cocaCola);
+            pedidoRepository.save(pedido1);
+        }
+
+        // Pedido 2: confirmado, tarjeta — Hamburguesa Clasica x1 ($950) + Jugo Naranja x1 ($450) = $1400
+        Producto hamburguesaClasica = mapaProductos.get("Hamburguesa Clasica");
+        Producto jugoNaranja = mapaProductos.get("Jugo de Naranja Natural");
+        if (hamburguesaClasica != null && jugoNaranja != null) {
+            Pedido pedido2 = Pedido.builder()
+                    .fecha(LocalDate.now().minusDays(1))
+                    .estado(Estado.CONFIRMADO)
+                    .total(0.0)
+                    .formaPago(FormaPago.TARJETA)
+                    .usuario(cliente)
+                    .build();
+            pedido2.addDetallePedido(1, hamburguesaClasica);
+            pedido2.addDetallePedido(1, jugoNaranja);
+            pedidoRepository.save(pedido2);
+        }
+
+        // Pedido 3: pendiente, transferencia — Tiramisú x2 ($1400) + Brownie con Helado x1 ($650) = $2050
+        Producto tiramisu = mapaProductos.get("Tiramisú");
+        Producto brownie = mapaProductos.get("Brownie con Helado");
+        if (tiramisu != null && brownie != null) {
+            Pedido pedido3 = Pedido.builder()
+                    .fecha(LocalDate.now())
+                    .estado(Estado.PENDIENTE)
+                    .total(0.0)
+                    .formaPago(FormaPago.TRANSFERENCIA)
+                    .usuario(cliente)
+                    .build();
+            pedido3.addDetallePedido(2, tiramisu);
+            pedido3.addDetallePedido(1, brownie);
+            pedidoRepository.save(pedido3);
+        }
+    }
+}

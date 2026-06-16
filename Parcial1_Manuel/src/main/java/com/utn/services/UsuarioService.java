@@ -63,6 +63,11 @@ public class UsuarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con email " + mail));
     }
 
+    @Transactional(readOnly = true)
+    public UsuarioDto buscarPorMail(String mail) {
+        return toDto(buscarEntidadPorMail(mail));
+    }
+
     @Transactional
     public UsuarioDto actualizar(Long id, UsuarioEdit dto) {
         Usuario usuario = buscarEntidadPorId(id);

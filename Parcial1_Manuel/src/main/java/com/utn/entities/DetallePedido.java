@@ -19,7 +19,8 @@ public class DetallePedido extends Base {
     private Integer cantidad;
 
     @Column(nullable = false)
-    private Double subtotal;
+    @Builder.Default
+    private Double subtotal = 0.0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_id", nullable = false)

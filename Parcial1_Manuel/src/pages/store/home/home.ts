@@ -42,8 +42,11 @@ const getProductImage = (nombre: string, categoriaNombre: string): string => {
 type ProductBadge = { label: string; className: string };
 
 const getProductBadge = (product: Product): ProductBadge => {
-  if (product.categoriaNombre === "Combos") return { label: "Más vendido", className: "favorite" };
-  if (product.categoriaNombre === "Pizzas") return { label: "20% OFF", className: "discount" };
+  const cat = product.categoriaNombre;
+  if (cat === "Pizzas") return { label: "20% OFF", className: "discount" };
+  if (cat === "Hamburguesas") return { label: "Clásico", className: "favorite" };
+  if (cat === "Bebidas") return { label: "Refrescante", className: "favorite" };
+  if (cat === "Postres") return { label: "Para cerrar", className: "discount" };
   return { label: "Recomendado", className: "favorite" };
 };
 

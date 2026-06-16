@@ -75,6 +75,7 @@ public class Pedido extends Base implements Calculable {
             return;
         }
         this.total = detalles.stream()
+                .filter(d -> !d.isEliminado())
                 .mapToDouble(DetallePedido::getSubtotal)
                 .sum();
     }

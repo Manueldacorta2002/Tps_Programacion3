@@ -145,8 +145,12 @@ const renderTable = () => {
 
 const loadProducts = async () => {
   tableContainer.innerHTML = `<p style="text-align:center;color:#aaa;padding:32px;">Cargando…</p>`;
-  products = await api.get<Product[]>("/products");
-  renderTable();
+  try {
+    products = await api.get<Product[]>("/products");
+    renderTable();
+  } catch {
+    tableContainer.innerHTML = `<p style="text-align:center;color:#c0392b;padding:32px;">No se pudieron cargar los productos.</p>`;
+  }
 };
 
 productoForm.addEventListener("submit", async (e) => {

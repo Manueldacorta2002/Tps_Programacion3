@@ -54,6 +54,10 @@ public class CategoriaService {
     @Transactional
     public CategoriaDto actualizar(Long id, CategoriaEdit dto) {
         Categoria categoria = findEntityById(id);
+        if (!categoria.getNombre().equalsIgnoreCase(dto.nombre())
+                && categoriaRepository.existsByNombreIgnoreCaseAndEliminadoFalse(dto.nombre())) {
+            throw new BusinessException("Ya existe una categoria con ese nombre");
+        }
         categoria.setNombre(dto.nombre());
         categoria.setDescripcion(dto.descripcion());
         return toDto(categoriaRepository.save(categoria));
