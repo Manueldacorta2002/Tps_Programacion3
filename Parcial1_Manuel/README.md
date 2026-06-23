@@ -299,6 +299,12 @@ Ver ejemplos JSON en [`docs/postman-ejemplos.md`](docs/postman-ejemplos.md).
 
 ---
 
+
+## Video demostrativo / Integrador
+
+Link del video integrador: https://drive.google.com/file/d/1xwDVvLcqt20olaniDyzCx58qFxTzFp39/view?usp=sharing
+
+
 ## Autor
 
 Manuel Da Corta
